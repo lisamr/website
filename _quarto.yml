@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: docs
-  
+
 website:
   repo-url: https://github.com/quarto-dev/quarto-demo
   repo-actions: [source]
@@ -16,9 +16,9 @@ website:
           - text: 'grad work'
       - text: 'Publications'
       - icon: github
-        href: https://github.com
+        href: https://github.com/lisamr
       - icon: linkedin
-        href: https://twitter.com
+        href: https://www.linkedin.com/in/lisamr/
 format:
   html:
     theme: lux
