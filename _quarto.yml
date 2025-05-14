@@ -5,16 +5,15 @@ project:
 website:
   repo-url: https://github.com/quarto-dev/quarto-demo
   repo-actions: [source]
-  title: "Blog"
+  title: Home
   navbar:
     right:
-      - text: 'Home'
-        href: about.qmd
       - text: 'Fun'
       - text: 'Projects'
         menu: 
           - text: 'grad work'
-      - text: 'Publications'
+      - text: 'Blog'
+        href: blog.qmd
       - icon: github
         href: https://github.com/lisamr
       - icon: linkedin

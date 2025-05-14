@@ -13,5 +13,8 @@
   },
   "readme.md": {
     "readme.html": "1be43236"
+  },
+  "blog.qmd": {
+    "blog.html": "6ace00b0"
   }
 }
