@@ -16,5 +16,14 @@
   },
   "blog.qmd": {
     "blog.html": "6ace00b0"
+  },
+  "posts/survival_analysis/2021-02-01-Survival_tutorial.md": {
+    "2021-02-01-Survival_tutorial.html": "7f6f3a5e"
+  },
+  "posts/2021-03-21-neighborhood_vignette.qmd": {
+    "2021-03-21-neighborhood_vignette.html": "1f2955eb"
+  },
+  "posts/survival_analysis/2021-02-01-Survival_tutorial.qmd": {
+    "2021-02-01-Survival_tutorial.html": "75c8880f"
   }
 }

@@ -10,7 +10,9 @@
     "listing": "/blog.html",
     "items": [
       "/posts/post-with-code/index.html",
-      "/posts/welcome/index.html"
+      "/posts/welcome/index.html",
+      "/posts/2021-03-21-neighborhood_vignette.html",
+      "/posts/survival_analysis/2021-02-01-Survival_tutorial.html"
     ]
   }
 ]
