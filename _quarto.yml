@@ -1,0 +1,26 @@
+project:
+  type: website
+
+website:
+  repo-url: https://github.com/quarto-dev/quarto-demo
+  repo-actions: [source]
+  title: "Blog"
+  navbar:
+    right:
+      - text: 'Home'
+        href: about.qmd
+      - text: 'Fun'
+      - text: 'Projects'
+        menu: 
+          - text: 'grad work'
+      - text: 'Publications'
+      - icon: github
+        href: https://github.com
+      - icon: linkedin
+        href: https://twitter.com
+format:
+  html:
+    theme: lux
+    css: styles.css
+
+
