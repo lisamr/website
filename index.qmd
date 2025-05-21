@@ -1,6 +1,6 @@
 ---
 title: "Lisa Rosenthal, Ph.D."
-image: profile.jpg
+image: profile_pic.jpg
 about:
   template: trestles
   links:
@@ -19,7 +19,7 @@ about:
 
 I'm a forest and fire ecologist with a heavy data science slant. 
 
-I am an applied Bayesian statistics nerd making the leap into the world of machine learning. As a scientist with interest in applying remote sensing data to monitor fire activity and measure fuels with better accuracy, I'm dedicating time to learning the ins and outs of ML. 
+As an applied Bayesian statistics nerd, I'm making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I'm dedicating time to learning the ins and outs of ML. 
 
 I'm following the [fast.ai course](https://course.fast.ai/) and I will be blogging about what I am learning and applying to real data. Check out my blog posts and follow along! 
 

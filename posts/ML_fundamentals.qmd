@@ -1,18 +1,9 @@
 ---
 title: "Untitled"
 format: html
-jupyter: python3
+categories: [news]
 draft: true
-listing: false
 ---
-
-
-```{python}
-# | echo: false
-
-import graphviz as gv
-```
-
 
 Blog posts: 
 - image classifier with deployment
