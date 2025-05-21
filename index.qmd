@@ -6,35 +6,37 @@ about:
   links:
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com
+      href: https://www.linkedin.com/in/lisamr/
     - icon: github
       text: github
-      href: https://github.com
+      href: https://github.com/lisamr
 
 ---
 
-
-### This content appears above the formatted about page content.!
-
 :::{#hero-heading}
-This is a change. 
 
-Finley Malloc is the Chief Data Scientist at Wengo Analytics. When not innovating on data platforms, Finley enjoys spending time unicycling and playing with her pet iguana.
+## About me
+
+I'm a forest and fire ecologist with a heavy data science slant. 
+
+I am an applied Bayesian statistics nerd making the leap into the world of machine learning. As a scientist with interest in applying remote sensing data to monitor fire activity and measure fuels with better accuracy, I'm dedicating time to learning the ins and outs of ML. 
+
+I'm following the [fast.ai course](https://course.fast.ai/) and I will be blogging about what I am learning and applying to real data. Check out my blog posts and follow along! 
 
 ## Education
 
-University of California, San Diego | San Diego, CA
-PhD in Mathematics | Sept 2011 - June 2015
+PhD in Ecology<br>
+University of California, Davis<br>
+2016 - 2021
 
-Macalester College | St. Paul, MN
-B.A in Economics | Sept 2007 - June 2011
+BS in Molecular Env. Biology<br>
+University of California, Berkeley<br>
+2009 - 2013
 
 ## Experience
 
-Wengo Analytics | Head Data Scientist | April 2018 - present
+California Air Resources Board | Wildfire Emissions Inventory Specialist | Sept 2023 - present
 
-GeoScynce | Chief Analyst | Sept 2012 - April 2018
+U.S. Geological Survey | Wildland Fuels Researcher | Sept 2021 - Aug 2023
 
-:::
-
-### This content appears below the formatted about page content.
+UC Davis | National Science Foundation Graduate Research Fellow | 2016 - 2021 

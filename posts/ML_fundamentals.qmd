@@ -1,0 +1,73 @@
+---
+title: "Untitled"
+format: html
+jupyter: python3
+draft: true
+listing: false
+---
+
+
+```{python}
+# | echo: false
+
+import graphviz as gv
+```
+
+
+Blog posts: 
+- image classifier with deployment
+- basic linear regression within ML framework--a shallow neural network. 
+    - do it with fastai/pytorch, the easy way
+    - break it down with a custom model
+    - explain basic steps of a ML model
+- ML model for image classifier
+    - bring it back to the basic steps of a ML model
+- a basic deep learning model using the regression example
+- deep learning models explained through the lens of linear regression
+    - terminology too
+
+
+terms to define
+- epoch
+- mini batch (or just batch)
+- rank
+- tensor
+- dimension
+- weights and bias = parameters
+- activations (things that get calculated, like response vars)
+- loss
+- neuron
+- hidden layer
+- AI, ML, NN, DL
+- training, validation, testing
+- cross validation
+- learning rate
+- transfer learning
+- ReLU
+- backpropogation
+- gradients: essentially a measure of how much each weight contributes to the overall error.
+
+```
+for i in range(10):
+    loss = quad_mae(abc)
+    loss.backward()
+    with torch.no_grad(): abc -= abc.grad*0.01
+    print(f'step={i}; loss={loss:.2f}')
+```
+
+```{python}
+1 + 1
+```
+
+The basics of a ML model: 
+
+- define a loss function `loss` (e.g. negative log-likelihood, MSE, RMSE, etc.)
+- establish starting parameters, `abc = tensor([a, b, c])`
+    - track gradients `abc.requires_grad_()`
+- predict the response varible: `y = f(x)`
+- calculate the loss
+- estimate the gradient values from the loss `loss.backward()`
+- update the parameters by subtracting the gradient*learning rate
+    - `abc -= abc.grad*lr`, but make sure to wrap that with `torch.no_grad()` so that the gradient decent function is not impacted by this calculation
+- reset gradient values with `abc.grad.zero_()`
+- end of loop, return to next iteration of model tuning
