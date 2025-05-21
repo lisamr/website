@@ -4,7 +4,7 @@
     "href": "blog.html",
     "title": "Home",
     "section": "",
-    "text": "Machine learning basics\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nSpatially explicit Bayesian neighborhood interactions\n\n\n\nBayesian\n\necology\n\nspatial\n\nStan\n\nR\n\n\n\n\n\n\n\n\n\nMar 21, 2021\n\n\n\n\n\n\n\n\n\n\n\n\nSurvival analysis with Poisson trick\n\n\n\nBayesian\n\nsurvival analysis\n\nbrms\n\nrstanarm\n\nR\n\n\n\nTutorial on how to develop a survival analysis under a more flexible framework using the Poisson trick\n\n\n\n\n\nOct 14, 2020\n\n\n\n\n\nNo matching items"
+    "text": "Machine learning basics\n\n\n\nMachine learning\n\nfundamentals\n\ngradient descent\n\npython\n\n\n\n\n\n\n\n\n\nMay 20, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nSpatially explicit Bayesian neighborhood interactions\n\n\n\nBayesian\n\necology\n\nspatial\n\nStan\n\nR\n\n\n\nHow to incorporate spatially explicit interactions from neighboring individuals using a Bayesian model in Stan\n\n\n\n\n\nMar 21, 2021\n\n\n\n\n\n\n\n\n\n\n\n\nSurvival analysis with Poisson trick\n\n\n\nBayesian\n\nsurvival analysis\n\nbrms\n\nrstanarm\n\nR\n\n\n\nTutorial on how to develop a survival analysis under a more flexible framework using the Poisson trick\n\n\n\n\n\nOct 14, 2020\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -60,7 +60,7 @@
     "href": "posts/survival.html",
     "title": "Survival analysis with Poisson trick",
     "section": "",
-    "text": "Lisa Rosenthal 10/14/2020\n#load packages\nlibrary(tidyverse)\nlibrary(survival)\nlibrary(ggfortify)\nlibrary(rstanarm)\nlibrary(brms)\nlibrary(tidybayes)\n\ntheme_set(theme_classic())"
+    "text": "#load packages\nlibrary(tidyverse)\nlibrary(survival)\nlibrary(ggfortify)\nlibrary(rstanarm)\nlibrary(brms)\nlibrary(tidybayes)\n\ntheme_set(theme_classic())"
   },
   {
     "objectID": "posts/survival.html#turn-data-into-long-format",
