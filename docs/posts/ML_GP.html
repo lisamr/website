@@ -237,7 +237,7 @@ window.Quarto = {
 
 
 
-<div id="cell-1" class="cell" data-execution_count="235">
+<div id="cell-1" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.spatial.distance <span class="im">import</span> cdist</span>
@@ -260,7 +260,7 @@ GP &amp;\sim MVN(0, K(d)) \\
 <section id="the-goal" class="level2">
 <h2 class="anchored" data-anchor-id="the-goal">The goal</h2>
 <p>In my previous blog post, I was fitting a quadratic function where I knew the underlying functional form, and the purpose was to estimate the parameters within that function. In this case, I want to approximate the function generating my data, without assuming a specific equation. To start, let’s simulate the data.</p>
-<div id="cell-4" class="cell" data-execution_count="895">
+<div id="cell-4" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># choose parameters/data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>ETA <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>RHO <span class="op">=</span> <span class="dv">10</span></span>
@@ -268,42 +268,44 @@ GP &amp;\sim MVN(0, K(d)) \\
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>DIST <span class="op">=</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Define functions to simulate data given the parameters defined above.</p>
-<div id="cell-6" class="cell" data-execution_count="925">
+<div id="cell-6" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># locations of data</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="op">-</span>DIST, DIST, <span class="fl">0.5</span>)  <span class="co"># from 0 to 60 step 0.5</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="bu">len</span>(x)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute distance matrix</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>distMat <span class="op">=</span> cdist(x.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), x.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), metric<span class="op">=</span><span class="st">'euclidean'</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="op">-</span>DIST, DIST, <span class="fl">0.5</span>) </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance kernel function</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fkernel(eta, rho, d):</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> eta<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> (d<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> (rho<span class="op">**</span><span class="dv">2</span>))</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance kernel function</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> fkernel(eta, rho, d):</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> eta<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> np.exp(<span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> (d<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> (rho<span class="op">**</span><span class="dv">2</span>))</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># function to simulate data</span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampleGP(eta, rho, sigma, seed<span class="op">=</span><span class="va">None</span>):</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> seed <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        np.random.seed(seed)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Kernel matrix</span></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> fkernel(eta, rho, distMat)</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    np.fill_diagonal(K, np.diag(K) <span class="op">+</span> <span class="fl">1e-9</span>)  <span class="co"># numerical stability</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simulate latent GP</span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    zGP <span class="op">=</span> np.random.normal(size<span class="op">=</span>N)</span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.linalg.cholesky(K)</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    GP <span class="op">=</span> L <span class="op">@</span> zGP</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simulate observations with normally distrib error</span></span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.random.normal(loc<span class="op">=</span>GP, scale<span class="op">=</span>sigma, size<span class="op">=</span>N)</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> GP, y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># function to simulate data</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sampleGP(x, eta, rho, sigma, seed<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> seed <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        np.random.seed(seed)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># process locations</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    N <span class="op">=</span> <span class="bu">len</span>(x)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Compute distance matrix</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    distMat <span class="op">=</span> cdist(x.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), x.reshape(<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>), metric<span class="op">=</span><span class="st">'euclidean'</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Kernel matrix</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    K <span class="op">=</span> fkernel(eta, rho, distMat)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    np.fill_diagonal(K, np.diag(K) <span class="op">+</span> <span class="fl">1e-9</span>)  <span class="co"># numerical stability</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simulate latent GP</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    zGP <span class="op">=</span> np.random.normal(size<span class="op">=</span>N)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.linalg.cholesky(K)</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    GP <span class="op">=</span> L <span class="op">@</span> zGP</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Simulate observations with normally distrib error</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.random.normal(loc<span class="op">=</span>GP, scale<span class="op">=</span>sigma, size<span class="op">=</span>N)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> GP, y</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Simulate the data and plot it.</p>
-<div id="cell-8" class="cell" data-execution_count="926">
+<div id="cell-8" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># simulate data</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>GP, y <span class="op">=</span> sampleGP(ETA, RHO, SIGMA, seed<span class="op">=</span><span class="dv">33</span>) </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>GP, y <span class="op">=</span> sampleGP(x, ETA, RHO, SIGMA, seed<span class="op">=</span><span class="dv">33</span>) </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot results</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, label<span class="op">=</span><span class="st">'Observed y'</span>)</span>
@@ -360,7 +362,7 @@ Values that have been transformed with a ReLU: tensor([0, 0, 0, 0, 0, 1, 2, 3])<
 <h2 class="anchored" data-anchor-id="write-a-neural-network-by-scratch">Write a neural network by scratch</h2>
 <p>Wow, that was a doozy! Hope you’re still with me. With that, let’s build our own neural network by scratch. In other blog posts, I’ll use <code>fastai</code> or <code>pytorch</code> to model data, but building one yourself really helps to cement what’s going on behind the scenes. It helps make the model less of a black box.</p>
 <p>To start, let’s convert our data to tensors. Since <span class="math inline">\(X\)</span> can in theory have multiple coefficients, let’s make it a 2-rank tensor (aka a matrix) and also make <span class="math inline">\(y\)</span> have the same dimensions. Another thing that is SUPER important is to standardize <span class="math inline">\(X\)</span>. This is also true in linear regressions in general. I z-score it so that the mean is centered at 0 and has a SD of 1. When I was developing this blog post, I couldn’t for the life of me get any sensible predictors before I standardized <span class="math inline">\(X\)</span>. Do it.</p>
-<div id="cell-13" class="cell" data-execution_count="927">
+<div id="cell-13" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># standardize x</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>x_std <span class="op">=</span> (x <span class="op">-</span> x.mean())<span class="op">/</span>(x.std())</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -379,9 +381,9 @@ Values that have been transformed with a ReLU: tensor([0, 0, 0, 0, 0, 1, 2, 3])<
 <ol type="1">
 <li><code>NN()</code> will be passed in the <code>OptimizerNN</code> class as the <code>model_fn</code> parameter. I’ve generalized the function to have an arbitrary number of hidden layers. Try to see how the code relates to the model equation that I wrote above.</li>
 <li><code>rmse()</code> is a loss function that we’ll use to compare the predictions against the data. It’s the same loss function I used in the other blog post.</li>
-<li><code>init_pars()</code> initiates the weights and biases for each of the hidden layers with random values pulled from standard normal distribution. I also generalized the function so that it can accomodate an arbitrary number of hidden layers. There’s one detail in how I initiated <code>W</code>, the weights. I multiplied the random values by <code>np.sqrt(2 / sizes[i])</code>, which is a common initialization trick called He initialization. This helps stabilize the variance of activations as they flow through the network, especially when using ReLU activation functions. Without it, I ran into issues.</li>
+<li><code>init_pars()</code> initiates the weights and biases for each of the hidden layers with random values pulled from standard normal distribution. I also generalized the function so that it can accomodate an arbitrary number of hidden layers. There’s one detail in how I initiated <code>W</code>, the weights. I multiplied the random values by <code>np.sqrt(2 / sizes[i])</code> (<code>sizes[i]</code> = the number of rows in the matrix), which is a common initialization trick called He initialization. This helps stabilize the variance of activations as they flow through the network, especially when using ReLU activation functions. Without it, I ran into issues.</li>
 </ol>
-<div id="cell-15" class="cell" data-execution_count="1071">
+<div id="cell-15" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the model function</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> NN(x, pars):</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    weights, biases <span class="op">=</span> pars</span>
@@ -400,7 +402,7 @@ Values that have been transformed with a ReLU: tensor([0, 0, 0, 0, 0, 1, 2, 3])<
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    n_coeffs<span class="op">=</span> x.size(<span class="dv">1</span>)</span>
 <span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    weights <span class="op">=</span> []</span>
 <span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    biases <span class="op">=</span> []</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    sizes <span class="op">=</span> [n_coeffs] <span class="op">+</span> H <span class="op">+</span> [<span class="dv">1</span>]</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    sizes <span class="op">=</span> [n_coeffs] <span class="op">+</span> H <span class="op">+</span> [<span class="dv">1</span>] <span class="co"># number of rows/columns in the matrices</span></span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(sizes) <span class="op">-</span> <span class="dv">1</span>):</span>
 <span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>        W <span class="op">=</span> torch.randn(sizes[i], sizes[i<span class="op">+</span><span class="dv">1</span>], dtype<span class="op">=</span>torch.<span class="bu">float</span>) <span class="op">*</span> np.sqrt(<span class="dv">2</span> <span class="op">/</span> sizes[i])</span>
 <span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>        b <span class="op">=</span> torch.zeros(sizes[i<span class="op">+</span><span class="dv">1</span>], dtype<span class="op">=</span>torch.<span class="bu">float</span>)</span>
@@ -458,11 +460,11 @@ Values that have been transformed with a ReLU: tensor([0, 0, 0, 0, 0, 1, 2, 3])<
 <span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._epoch()</span>
 <span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>To run this, you need to initiate the weights and biases with 2 parameters: <code>x</code>–the data–and <code>H</code>–the number of hidden units/neurons/nodes in each hidden layer. It takes a lot of fiddling, but I landed on <code>[32, 64, 64, 64, 64, 32]</code>. This means there are 6 hidden layers with the first layer having 32 nodes, etc. You can also play with the learning rate and number of epochs. You could probably reduce the loss by playing with all of these values more.</p>
-<div id="cell-17" class="cell" data-execution_count="1073">
+<p>To run this, you need to initiate the weights and biases with 2 parameters: <code>x</code>–the data–and <code>H</code>–the number of hidden units/neurons/nodes in each hidden layer. It takes a lot of fiddling, but I landed on <code>[16, 32, 64, 64, 32, 16]</code>. This means there are 6 hidden layers with the first layer having 16 nodes, etc. You can also play with the learning rate and number of epochs. You could probably reduce the loss by playing with all of these values more.</p>
+<div id="cell-17" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create parameters--weights and bias for each layer</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>torch.manual_seed(<span class="dv">33</span>) <span class="co"># set seed for reproducibility </span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pars <span class="op">=</span> init_pars(x_std, [<span class="dv">32</span>, <span class="dv">64</span>, <span class="dv">64</span>, <span class="dv">64</span>, <span class="dv">64</span>, <span class="dv">32</span>])</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pars <span class="op">=</span> init_pars(x_std, [<span class="dv">16</span>, <span class="dv">32</span>, <span class="dv">64</span>, <span class="dv">64</span>, <span class="dv">32</span>, <span class="dv">16</span>]) </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># instantiate class</span></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>learning_rate <span class="op">=</span> <span class="fl">.005</span></span>
@@ -473,11 +475,11 @@ Values that have been transformed with a ReLU: tensor([0, 0, 0, 0, 0, 1, 2, 3])<
 <span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>opt.train(nepochs)</span>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"RMSE: "</span>, opt.loss_values[<span class="op">-</span><span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>RMSE:  0.6245489467120209</code></pre>
+<pre><code>RMSE:  0.6291500277106367</code></pre>
 </div>
 </div>
 <p>As the model trained, it stored the loss values into a list. When I plot the loss with respect to the epochs, it continues dropping and starts to level out.</p>
-<div id="cell-19" class="cell" data-execution_count="1076">
+<div id="cell-19" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check out change in loss</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>loss_df <span class="op">=</span> pd.DataFrame({<span class="st">'i'</span>: <span class="bu">range</span>(<span class="dv">0</span>, nepochs), <span class="st">'loss'</span>: opt.loss_values})</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>plt.plot(loss_df[<span class="st">'i'</span>], loss_df[<span class="st">'loss'</span>])</span>
@@ -493,7 +495,7 @@ Values that have been transformed with a ReLU: tensor([0, 0, 0, 0, 0, 1, 2, 3])<
 </div>
 </div>
 <p>And lastly, I can see how my predictions look against the data and the underlying GP model. It looks quite good, especially since I built this model by scratch! Congrats on making it to the end. Next posts, I promise to start using established packages to build NNs.</p>
-<div id="cell-21" class="cell" data-execution_count="1075">
+<div id="cell-21" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize the prediction values</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.plot(x, (opt.pred_values), color <span class="op">=</span> <span class="st">'red'</span>, label <span class="op">=</span> <span class="st">'NN prediction'</span>)</span>
