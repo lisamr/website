@@ -1,1 +1,11 @@
 /* css styles */
+
+strong {
+    font-weight: 900 !important;
+    color: #000 !important;
+  }
+  
+em {
+font-style: italic !important;
+color: #333 !important;
+}

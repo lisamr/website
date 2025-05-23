@@ -11,7 +11,7 @@
     "href": "index.html",
     "title": "Lisa Rosenthal, Ph.D.",
     "section": "",
-    "text": "I’m a forest and fire ecologist with a heavy data science slant.\nAs an applied Bayesian statistics nerd, I’m making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I’m dedicating time to learning the ins and outs of ML.\nI’m following the fast.ai course and I will be blogging about what I am learning and applying to real data. Check out my blog posts and follow along!\n\n\n\nPhD in Ecology University of California, Davis 2016 - 2021\nBS in Molecular Env. Biology University of California, Berkeley 2009 - 2013\n\n\n\nCalifornia Air Resources Board | Wildfire Emissions Inventory Specialist | Sept 2023 - present\nU.S. Geological Survey | Wildland Fuels Researcher | Sept 2021 - Aug 2023\nUC Davis | National Science Foundation Graduate Research Fellow | 2016 - 2021"
+    "text": "I’m a forest and fire ecologist with a heavy data science slant.\nAs an applied Bayesian statistics nerd, I’m making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I’m dedicating time to learning the ins and outs of ML.\nI’m following the fast.ai course and I will be blogging about what I am learning and applying to real data. Check out my blog posts and follow along!\n\n\n\nPhD in Ecology University of California, Davis 2016 - 2021\nBS in Molecular Env. Biology University of California, Berkeley 2009 - 2013\n\n\n\nCalifornia Air Resources Board | Wildfire Emissions Inventory Specialist | Sept 2023 - present\nU.S. Geological Survey | Wildland Fuels Researcher | Sept 2021 - Aug 2023\nUC Davis | National Science Foundation Graduate Research Fellow | 2016 - 2021\n\n\n\nIf you have any questions or requests, please reach out: lisamicaela.r &lt;at&gt; gmail.com"
   },
   {
     "objectID": "index.html#about-me",
@@ -124,5 +124,110 @@
     "title": "Untitled",
     "section": "",
     "text": "Blog posts: - image classifier with deployment - basic linear regression within ML framework–a shallow neural network. - do it with fastai/pytorch, the easy way - break it down with a custom model - explain basic steps of a ML model - ML model for image classifier - bring it back to the basic steps of a ML model - a basic deep learning model using the regression example - deep learning models explained through the lens of linear regression - terminology too\nterms to define - epoch - mini batch (or just batch) - rank - tensor - dimension - weights and bias = parameters - activations (things that get calculated, like response vars) - loss - neuron - hidden layer - AI, ML, NN, DL - training, validation, testing - cross validation - learning rate - transfer learning - ReLU - backpropogation - gradients: essentially a measure of how much each weight contributes to the overall error.\nfor i in range(10):\n    loss = quad_mae(abc)\n    loss.backward()\n    with torch.no_grad(): abc -= abc.grad*0.01\n    print(f'step={i}; loss={loss:.2f}')\n\n1 + 1\n\n2\n\n\nThe basics of a ML model:\n\ndefine a loss function loss (e.g. negative log-likelihood, MSE, RMSE, etc.)\nestablish starting parameters, abc = tensor([a, b, c])\n\ntrack gradients abc.requires_grad_()\n\npredict the response varible: y = f(x)\ncalculate the loss\nestimate the gradient values from the loss loss.backward()\nupdate the parameters by subtracting the gradient*learning rate\n\nabc -= abc.grad*lr, but make sure to wrap that with torch.no_grad() so that the gradient decent function is not impacted by this calculation\n\nreset gradient values with abc.grad.zero_()\nend of loop, return to next iteration of model tuning"
+  },
+  {
+    "objectID": "index.html#contact",
+    "href": "index.html#contact",
+    "title": "Lisa Rosenthal, Ph.D.",
+    "section": "",
+    "text": "If you have any questions or requests, please reach out: lisamicaela.r &lt;at&gt; gmail.com"
+  },
+  {
+    "objectID": "fun.html",
+    "href": "fun.html",
+    "title": "Fun times",
+    "section": "",
+    "text": "I like to climb rocks.\n\n\n\n\n\n\n“Big Time” on the Watchtower, Sequoia NP\n\n\n\n\n\n\n\n“Separate Reality”, Yosemite Valley\n\n\n\n\n\n\n\n“Tales of Power”, Yosemite Valley\n\n\n\n\n\nI like playing in my backyard.\n\n\n\n\n\n\nSnowshed, Donner Summit\n\n\n\n\n\n\n\nStarwall, Donner Summit\n\n\n\n\n\n\n\nLake island\n\n\n\n\n\nMy best friend is named Lobster. He is orange.\n\n\n\n\n\n\nBaby boy\n\n\n\n\n\n\n\nLobster on lobster\n\n\n\n\n\n\n\nHe’s so cute\n\n\n\n\n\nMushrooms are fun to find.\n\n\n\n\n\n\nBlack trumpets\n\n\n\n\n\n\n\nCoastal treasures\n\n\n\n\n\n\n\nThe best"
+  },
+  {
+    "objectID": "fun.html#mountain-climbing",
+    "href": "fun.html#mountain-climbing",
+    "title": "Fun times",
+    "section": "",
+    "text": "A Lovely Image\n\n\n\n\n\n\n\nAnother Lovely Image\n\n\n\n\n\n\n\nThe Last Lovely Image"
+  },
+  {
+    "objectID": "resume.html",
+    "href": "resume.html",
+    "title": "Home",
+    "section": "",
+    "text": "Download PDF File\n   \n    Unable to display PDF file. Download instead."
+  },
+  {
+    "objectID": "example.html",
+    "href": "example.html",
+    "title": "example",
+    "section": "",
+    "text": "this is a project."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Home",
+    "section": "",
+    "text": "Diversity-disease relationships\n\n\nDissertation work examining effects of diversity on disease risk using natural and modified plant communities.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFire monitoring\n\n\nActive fire monitoring usings VIIRS satellite data\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLandscape level mortality\n\n\nLandscape-level effects of tree mortality on fire severity and risk to areas of high value\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nLong-term monitoring of canopy gap dynamics\n\n\nAssess how canopy gaps change over time using field-based and remote sensing data\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nRhouse\n\n\nShiny dashboard for making big financial decisions\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nSpatial distribution of wildland fuels\n\n\nReserach examining the distribution of surface fuels and canopy-level mortality\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "projects/example.html",
+    "href": "projects/example.html",
+    "title": "Rhouse",
+    "section": "",
+    "text": "My husband and I bought a house and I was overwhelmed with all of the financial decisions that we needed to make. Instead of building an Excel model like a normal person, I decided to model various financial choices in R and made a Shiny dashboard. Yeah…\nCheck it out and lmk if you actually found it useful!"
+  },
+  {
+    "objectID": "projects/rhouse.html",
+    "href": "projects/rhouse.html",
+    "title": "Rhouse",
+    "section": "",
+    "text": "My husband and I bought a house and I was overwhelmed with all of the financial decisions that we needed to make. Instead of building an Excel model like a normal person, I decided to model various financial choices in R and made a Shiny dashboard. Yeah…\nCheck it out and lmk if you actually found it useful!"
+  },
+  {
+    "objectID": "projects/ll_mortality.html",
+    "href": "projects/ll_mortality.html",
+    "title": "Landscape level mortality",
+    "section": "",
+    "text": "Using remote sensing data, I analyzed fire severity with respect to surrounding tree mortality, while controlling for relevant abiotic and biotic variables. Model development began on the KNP fire, but a larger goal was to expand the analysis to many fires across the Sierra Nevada. A distance decay kernel is embedded within a Bayesian model to estimate the landscape-level effect of tree mortality. I explored how treatment areas alter predicted fire severity with a focus on giant sequoia groves.\n\n\n\nA. Landscape effects of tree mortality on fire severity (cells) analyzed by accounting for dead trees far from a focal site, while assuming that the importance (shading) decreases with distance. B) The scale that contains 90% of the mortality effect. Here, mortality is most important within 0.6 km. C) We expect fuel treatments over larger areas and of higher intensity to reduce risk of high severity fire."
+  },
+  {
+    "objectID": "projects/ll_mortality.html#approach",
+    "href": "projects/ll_mortality.html#approach",
+    "title": "Landscape level mortality",
+    "section": "",
+    "text": "Using remote sensing data, I analyzed fire severity with respect to surrounding tree mortality, while controlling for relevant abiotic and biotic variables. Model development began on the KNP fire, but a larger goal was to expand the analysis to many fires across the Sierra Nevada. A distance decay kernel is embedded within a Bayesian model to estimate the landscape-level effect of tree mortality. I explored how treatment areas alter predicted fire severity with a focus on giant sequoia groves.\n\n\n\nA. Landscape effects of tree mortality on fire severity (cells) analyzed by accounting for dead trees far from a focal site, while assuming that the importance (shading) decreases with distance. B) The scale that contains 90% of the mortality effect. Here, mortality is most important within 0.6 km. C) We expect fuel treatments over larger areas and of higher intensity to reduce risk of high severity fire."
+  },
+  {
+    "objectID": "projects/ll_mortality.html#statistical-model",
+    "href": "projects/ll_mortality.html#statistical-model",
+    "title": "Landscape level mortality",
+    "section": "Statistical model",
+    "text": "Statistical model\nFire severity \\(y_i\\) at observation \\(i\\) (\\(i = 1...N\\)) is categorized into 4 ordered levels–unchanged, low, moderate, and high–and is modeled with an ordered logit likelihood, where \\(\\phi_i\\) controls the ordinal probabilities and \\(\\kappa\\) estimates the internal cutpoints (equivalent to the intercepts of each ordered category). For more information on ordinal regressions in Stan, see this tutorial by Michael Betancourt here.\n\\[\n\\begin{aligned}\ny_i &\\sim \\text{ordered-logit}(\\phi_i, \\kappa) \\\\\n\\phi_i &= XB + (X_{DD} W)\\beta + \\text{interaction terms} \\\\\nw_{0[m]} &= exp(-1/2*distance_m^2 / \\delta^2) * area_m \\\\\nW &= \\dfrac{w_0}{\\Sigma^M_m w_{0[m]} }\n\\end{aligned}\n\\]\nThe equation for \\(\\phi\\) is where you’d include your typical environmental predictors, including a matrix of variables in \\(X\\) and vector of parameters \\(B\\). Landscape-level effects are estimated by weighting landscape variables, which have been discretized into \\(M\\) non-overlapping concentric rings, by a function that decreases with distance and standarized to sum to one (see equation \\(W\\); for more information consult Miguet et al. 2017 and Moll et al. 2020). Common distance weighting functions including negative exponential or negative quadratic exponential (as shown above) and can be assessed for predictive power using model comparison. The smoothing function assumes that the effect of a landscape variable is strongest close to the focal site and decays as a function of distance. In the equation above, \\(\\delta\\) controls the length scale of the decay function and coursely describes the distance (in km) at which the effect is about half. Density of dead trees and live trees are both included as distance dependent effects. Distance dependent effects are included in the model as an array of matrices \\(X_{DD}\\) with N rows and M columns, where elements are the mean of the variable within each \\(i\\) focal site’s ring \\(m\\). The matrices \\(X_{DD}\\) are multipled by \\(W\\), the weighting function and the overall effects of the landscape varialbes are determined by \\(\\beta\\)."
+  },
+  {
+    "objectID": "projects/SOD.html",
+    "href": "projects/SOD.html",
+    "title": "Diversity-disease relationships",
+    "section": "",
+    "text": "Rosenthal, L., Simler-Williamson, A., Rizzo, D. “Community-level prevalence of a forest pathogen, not individual-level disease risk, declines with tree diversity”. Ecology Letters. 2021.\n\npaper\ncode\n\n\n\n\n\n\nWhile plant species richness decreased community-level prevalence of the forest disease sudden oak death, individual disease risk for species most susceptible remained the same or even increased. This study demonstrates that mechanisms driving disease risk are not conserved across hierarchical scales, and that statistical considerations can lead to misleading explanations of the diversity-disease relationship.\n\nRosenthal, L., Fajardo, S., Rizzo, D. “Sporulation Potential of Phytophthora ramorum Differs Among Common California Plant Species in the Big Sur Region”. Plant Disease. 2021.\n\npaper\ncode\n\n\n\n\n\n\nSudden oak death (SOD), caused by the generalist pathogen Phytophthora ramorum, has profoundly impacted California coastal ecosystems. SOD has largely been treated as a two-host system, with remaining species as epidemiologically unimportant. We formally quantified the sporulation potential of common plant species inhabiting SOD-endemic ecosystems on the California coast in the Big Sur region. Data from this study was subsequently integrated into an analysis testing the mechanisms underlying the diversity-disease relationship (see above: Rosenthal et al., Ecology Letters 2021).\n\nRosenthal, L., Brooks, W., Rizzo, D. “Species densities, assembly order, and competence jointly determine the diversity–disease relationship” Ecology. 2022.\n\npaper\ncode\n\n\n\n\n\n\nSince species vary in abundance and host competence (i.e., ability to get infected and transmit a pathogen), changes in species composition caused by biodiversity loss impacts disease dynamics. Forecasting effects of species composition on disease depends on community (dis)assembly, processes determining how species are added to (or lost from) communities. We simulated community assembly by planting mesocosms, nested along a richness gradient, and tested how relationships between richness, species assembly order, and overall density affect disease risk."
+  },
+  {
+    "objectID": "projects/yosemite.html",
+    "href": "projects/yosemite.html",
+    "title": "Long-term monitoring of canopy gap dynamics",
+    "section": "",
+    "text": "Unlike abiotic disturbances that cause discrete, non-expanding canopy gaps, biotic mortality agents can create gaps that continue to grow for many years (see sidebar for common agents). Yosemite Valley is an example of a natural landscape in the Sierra Nevada that has seen substantial growth in canopy gaps over the past several decades. In this study, I addressed the following questions:\n\nHow do gaps change in terms of i) area, ii) cause of gap formation, and iii) mortality?\nHow has live tree coverage changed over time?\n\nWe monitored canopy gaps in Yosemite Valley through repeated surveys of belt transects in 1999, 2004, 2011, and most recently in Fall 2018.\n\n\n\n\n\nUsing Google Earth Engine, I also built a random forest model using lidar data, NAIP imagery, and Landsat data to estimate live tree coverage over the entirety of the Valley covering a 34-year timeframe."
+  },
+  {
+    "objectID": "projects/fuels.html",
+    "href": "projects/fuels.html",
+    "title": "Spatial distribution of wildland fuels",
+    "section": "",
+    "text": "Das, A., Rosenthal, L., Shive, K. “The effectiveness of wildfire at meeting restoration goals across a fire severity gradient in the Sierra Nevada”. Forest Ecology & Management. 2025.\n\npaper\n\nAnalysis of wildfires in the southern Sierra Nevada quantifies post-fire fuel loading across a severity gradient and assesses the impact within the context of the National Park’s fuel management plan. Highlights include:\n\nFine fuels declined with severity, while coarse fuels were more variable\nLow and moderate severity wildfire effects align with short-term management goals\nAbundant standing fuels and lack of heterogeneity may reduce long-term resilience\nLarge tree densities tended to fall below management targets even in control areas\n\n\n\n\n\n\n\nThis paper was just the tip of the iceberg in the fuels analysis that I conducted. The much larger goal was to examine fine-scale spatial heterogeneity of surface fuels. Ultimately, this work is needed to build fuel models at high spatial resolution for next-generation fire behavior models. I developed hierarchical Guassian Process models to statistically estimate the spatial turnover of various fuel components. I used K-fold cross-validation to test the predictive performance of the models, running multiple models in parallel on a high performance computing cluster.\n\n\n\n\n\n\nCheng, Y., Oehmcke, S., Brandt, M., Rosenthal, L., Das, A., Vrieling, A., Saatchi, S., Wagner, F., Mugabowindekwe, M., Verbruggen, W., Beier, C., Horion, S. “Scattered tree death contributes to substantial forest loss in California”. Nature Communications. 2024.\nDuring my time at USGS, I also coauthored a publication focused on detecting tree mortality using high-resolution NAIP imagery with a deep learning model. Check it out here:\n\npaper"
+  },
+  {
+    "objectID": "projects/firemonitoring.html",
+    "href": "projects/firemonitoring.html",
+    "title": "Fire monitoring",
+    "section": "",
+    "text": "In my job at CARB, I developed a new pipeline to generate an inventory of daily wildfire emissions. Plans to release the documentation and code publicly are for Summer 2025. More to come on the emissions work.\nIn order to derive daily emissions estimates, I collaborated with NASA on an algorithm called “FEDS”, the Fire Events Data Suite (see Chen et al. 2021). FEDS ingests VIIRS satellite active fire products, clusters the points with a machine learning algorithm, and interpolates sub-daily perimeters every 12 hours. While NASA is mainly addressing the need to monitor near-real time fire activity globally, I’ve worked with the team to improve the accuracy of retrospective, science-standard fire monitoring products.\n\ncode"
   }
 ]

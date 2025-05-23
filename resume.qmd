@@ -1,0 +1,4 @@
+---
+format: html
+---
+{{< pdf file="Lisa-Rosenthal-Resume-20250523.pdf"  height="500px">}} 

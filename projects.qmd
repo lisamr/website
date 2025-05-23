@@ -1,0 +1,13 @@
+---
+title: ""
+listing:
+  contents: projects
+  sort: title asc
+  type: grid
+  categories: false
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: true
+---
+

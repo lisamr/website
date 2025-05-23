@@ -49,5 +49,38 @@
   },
   "posts/ML_GP.ipynb": {
     "ML_GP.html": "eb855939"
+  },
+  "fun.qmd": {
+    "fun.html": "5ba626f3"
+  },
+  "resume.qmd": {
+    "resume.html": "c8aa6f4e"
+  },
+  "example.qmd": {
+    "example.html": "0de2d97d"
+  },
+  "projects.qmd": {
+    "projects.html": "2864f9c8"
+  },
+  "projects/example.qmd": {
+    "example.html": "17a2d536"
+  },
+  "projects/rhouse.qmd": {
+    "rhouse.html": "3a766885"
+  },
+  "projects/ll_mortality.qmd": {
+    "ll_mortality.html": "0a76fc10"
+  },
+  "projects/fuels.qmd": {
+    "fuels.html": "3a02ee9a"
+  },
+  "projects/yosemite.qmd": {
+    "yosemite.html": "b165f702"
+  },
+  "projects/SOD.qmd": {
+    "SOD.html": "a1897a15"
+  },
+  "projects/firemonitoring.qmd": {
+    "firemonitoring.html": "08c68e09"
   }
 }

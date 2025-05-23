@@ -7,5 +7,16 @@
       "/posts/neighborhoods.html",
       "/posts/survival.html"
     ]
+  },
+  {
+    "listing": "/projects.html",
+    "items": [
+      "/projects/SOD.html",
+      "/projects/firemonitoring.html",
+      "/projects/ll_mortality.html",
+      "/projects/yosemite.html",
+      "/projects/rhouse.html",
+      "/projects/fuels.html"
+    ]
   }
 ]

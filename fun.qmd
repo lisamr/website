@@ -1,0 +1,54 @@
+---
+title: "Fun times"
+format: html
+lightbox: true
+---
+
+
+I like to climb rocks. 
+
+::: {layout-ncol=3 .image-grid}
+
+!["Big Time" on the Watchtower, Sequoia NP](images/bigtime.jpg){group="my-gallery"}
+
+!["Separate Reality", Yosemite Valley](images/separate_reality.jpeg){group="my-gallery"}
+
+!["Tales of Power", Yosemite Valley](images/tales.jpg){group="my-gallery"}
+
+:::
+
+I like playing in my backyard.
+
+::: {layout-ncol=3 .image-grid}
+
+![Snowshed, Donner Summit](images/snowshed.jpg){group="my-gallery"}
+
+![Starwall, Donner Summit](images/starwall.jpg){group="my-gallery"}
+
+![Lake island](images/lake.jpg){group="my-gallery"}
+
+:::
+
+My best friend is named Lobster. He is orange. 
+
+::: {layout-ncol=3 .image-grid}
+
+![Baby boy](images/lobster_mouse.jpg){group="my-gallery"}
+
+![Lobster on lobster](images/lobster.jpg){group="my-gallery"}
+
+![He's so cute](images/lobster_cute.jpg){group="my-gallery"}
+
+:::
+
+Mushrooms are fun to find.
+
+::: {layout-ncol=3 .image-grid}
+
+![Black trumpets](images/blacktrumpets.jpg){group="my-gallery"}
+
+![Coastal treasures](images/coastal_finds.jpg){group="my-gallery"}
+
+![The best](images/morels.jpg){group="my-gallery"}
+
+:::

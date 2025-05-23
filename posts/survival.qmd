@@ -1,6 +1,8 @@
 ---
 title: "Survival analysis with Poisson trick"
-format: html
+format:
+  html:
+    toc: true
 categories: [Bayesian, survival analysis, brms, rstanarm, R]
 date: 2020-10-14
 description: "Tutorial on how to develop a survival analysis under a more flexible framework using the Poisson trick"

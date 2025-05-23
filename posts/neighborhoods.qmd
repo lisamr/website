@@ -1,6 +1,8 @@
 ---
 title: "Spatially explicit Bayesian neighborhood interactions"
-format: html
+format:
+  html:
+    toc: true
 date: 2021-03-21
 categories: [Bayesian, ecology, spatial, Stan, R]
 description: "How to incorporate spatially explicit interactions from neighboring individuals using a Bayesian model in Stan"

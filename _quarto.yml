@@ -3,17 +3,19 @@ project:
   output-dir: docs
 
 website:
-  repo-url: https://github.com/quarto-dev/quarto-demo
+  repo-url: https://github.com/lisamr/website
   repo-actions: [source]
   title: Home
   navbar:
     right:
-      - text: 'Fun'
-      - text: 'Projects'
-        menu: 
-          - text: 'grad work'
       - text: 'Blog'
         href: blog.qmd
+      - text: 'Projects'
+        href: projects.qmd 
+      - text: 'Resume'
+        href: resume.qmd
+      - text: 'Fun'
+        href: fun.qmd
       - icon: github
         href: https://github.com/lisamr
       - icon: linkedin

@@ -1,6 +1,6 @@
 ---
 title: "Lisa Rosenthal, Ph.D."
-image: profile_pic.jpg
+image: images/profile_pic.jpg
 about:
   template: trestles
   links:
@@ -25,18 +25,22 @@ I'm following the [fast.ai course](https://course.fast.ai/) and I will be bloggi
 
 ## Education
 
-PhD in Ecology<br>
+**PhD in Ecology**<br>
 University of California, Davis<br>
 2016 - 2021
 
-BS in Molecular Env. Biology<br>
+**BS in Molecular Env. Biology**<br>
 University of California, Berkeley<br>
 2009 - 2013
 
 ## Experience
 
-California Air Resources Board | Wildfire Emissions Inventory Specialist | Sept 2023 - present
+**California Air Resources Board** | Wildfire Emissions Inventory Specialist | Sept 2023 - present
 
-U.S. Geological Survey | Wildland Fuels Researcher | Sept 2021 - Aug 2023
+**U.S. Geological Survey** | Wildland Fuels Researcher | Sept 2021 - Aug 2023
 
-UC Davis | National Science Foundation Graduate Research Fellow | 2016 - 2021 
+**UC Davis** | National Science Foundation Graduate Research Fellow | 2016 - 2021 
+
+## Contact
+
+If you have any questions or requests, please reach out: lisamicaela.r \<at\> gmail.com
