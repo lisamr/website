@@ -2,7 +2,11 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/ML_fundamentals.html",
+      "/posts/ML_GP.html",
       "/posts/ML_basics.html",
+      "/posts/post-with-code/index.html",
+      "/posts/welcome/index.html",
       "/posts/neighborhoods.html",
       "/posts/survival.html"
     ]
