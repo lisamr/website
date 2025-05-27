@@ -19,7 +19,7 @@ about:
 
 I'm a forest and fire ecologist with a heavy data science slant. 
 
-As an applied Bayesian statistician, I'm making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I'm dedicating time to learning the ins and outs of ML. 
+As an applied Bayesian statistician, I’m deepening my machine learning expertise to better leverage remote sensing data. With a focus on monitoring forest and fire activity and improving fuel measurement, I’m honing the fundamentals of ML to apply them effectively in real-world, data-rich contexts.
 
 ## Open to opportunities
 
