@@ -11,14 +11,14 @@
     "href": "index.html",
     "title": "Lisa Rosenthal, Ph.D.",
     "section": "",
-    "text": "I’m a forest and fire ecologist with a heavy data science slant.\nAs an applied Bayesian statistics nerd, I’m making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I’m dedicating time to learning the ins and outs of ML.\nI’m following the fast.ai course and I will be blogging about what I am learning and applying to real data. Check out my blog posts and follow along!\n\n\n\nPhD in Ecology University of California, Davis 2016 - 2021\nBS in Molecular Env. Biology University of California, Berkeley 2009 - 2013\n\n\n\nCalifornia Air Resources Board | Wildfire Emissions Inventory Specialist | Sept 2023 - present\nU.S. Geological Survey | Wildland Fuels Researcher | Sept 2021 - Aug 2023\nUC Davis | National Science Foundation Graduate Research Fellow | 2016 - 2021\n\n\n\nIf you have any questions or requests, please reach out: lisamicaela.r &lt;at&gt; gmail.com"
+    "text": "I’m a forest and fire ecologist with a heavy data science slant.\nAs an applied Bayesian statistician, I’m making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I’m dedicating time to learning the ins and outs of ML.\n\n\n\nI’m open to collaborations, consulting, or roles using Bayesian methods, ML, and satellite data to advance understanding of forest and wildfire dynamics.\n\n\n\nPhD in Ecology University of California, Davis 2016 - 2021\nBS in Molecular Env. Biology University of California, Berkeley 2009 - 2013\n\n\n\nCalifornia Air Resources Board | Wildfire Emissions Inventory Specialist | Sept 2023 - present\nU.S. Geological Survey | Wildland Fuels Researcher | Sept 2021 - Aug 2023\nUC Davis | National Science Foundation Graduate Research Fellow | 2016 - 2021\n\n\n\nIf you have any questions or requests, please reach out: lisamicaela.r &lt;at&gt; gmail.com"
   },
   {
     "objectID": "index.html#about-me",
     "href": "index.html#about-me",
     "title": "Lisa Rosenthal, Ph.D.",
     "section": "",
-    "text": "I’m a forest and fire ecologist with a heavy data science slant.\nAs an applied Bayesian statistics nerd, I’m making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I’m dedicating time to learning the ins and outs of ML.\nI’m following the fast.ai course and I will be blogging about what I am learning and applying to real data. Check out my blog posts and follow along!"
+    "text": "I’m a forest and fire ecologist with a heavy data science slant.\nAs an applied Bayesian statistician, I’m making the leap into the world of machine learning. With an interest in applying remote sensing data to monitor forest and fire activity and measure fuels with better accuracy, I’m dedicating time to learning the ins and outs of ML."
   },
   {
     "objectID": "index.html#education",
@@ -229,5 +229,12 @@
     "title": "Fire monitoring",
     "section": "",
     "text": "In my job at CARB, I developed a new pipeline to generate an inventory of daily wildfire emissions. Plans to release the documentation and code publicly are for Summer 2025. More to come on the emissions work.\nIn order to derive daily emissions estimates, I collaborated with NASA on an algorithm called “FEDS”, the Fire Events Data Suite (see Chen et al. 2021). FEDS ingests VIIRS satellite active fire products, clusters the points with a machine learning algorithm, and interpolates sub-daily perimeters every 12 hours. While NASA is mainly addressing the need to monitor near-real time fire activity globally, I’ve worked with the team to improve the accuracy of retrospective, science-standard fire monitoring products.\n\ncode"
+  },
+  {
+    "objectID": "index.html#open-to-opportunities",
+    "href": "index.html#open-to-opportunities",
+    "title": "Lisa Rosenthal, Ph.D.",
+    "section": "",
+    "text": "I’m open to collaborations, consulting, or roles using Bayesian methods, ML, and satellite data to advance understanding of forest and wildfire dynamics."
   }
 ]
