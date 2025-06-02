@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/MNIST_classification.html",
       "/posts/ML_GP.html",
       "/posts/ML_basics.html",
       "/posts/neighborhoods.html",

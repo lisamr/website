@@ -82,5 +82,14 @@
   },
   "projects/firemonitoring.qmd": {
     "firemonitoring.html": "08c68e09"
+  },
+  "posts/MNIST.ipynb": {
+    "MNIST.html": "dfe4a981"
+  },
+  "posts/Untitled0.ipynb": {
+    "Untitled0.html": "497ba42e"
+  },
+  "posts/MNIST_classification.ipynb": {
+    "MNIST_classification.html": "8cd21ddc"
   }
 }

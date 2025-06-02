@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2025-06-02">
+<meta name="description" content="Build and train a neural network to recognize handwritten digits using the fastai library.">
+
+<title>Image Classification of Handwritten Digits with fastai – Home</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-bb49951d50c4a7e8d052f44ae1610a34.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Home</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../resume.html"> 
+<span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../fun.html"> 
+<span class="menu-text">Fun</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/lisamr"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/lisamr/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Image Classification of Handwritten Digits with fastai</h1>
+                  <div>
+        <div class="description">
+          Build and train a neural network to recognize handwritten digits using the fastai library.
+        </div>
+      </div>
+                          <div class="quarto-categories">
+                <div class="quarto-category">neural network</div>
+                <div class="quarto-category">MNIST</div>
+                <div class="quarto-category">imagery</div>
+                <div class="quarto-category">python</div>
+                <div class="quarto-category">fastai</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 2, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#binary-mnist-classification" id="toc-binary-mnist-classification" class="nav-link" data-scroll-target="#binary-mnist-classification">Binary MNIST classification</a>
+  <ul class="collapse">
+  <li><a href="#load-up-the-data" id="toc-load-up-the-data" class="nav-link" data-scroll-target="#load-up-the-data">Load up the data</a></li>
+  <li><a href="#create-a-learner-object" id="toc-create-a-learner-object" class="nav-link" data-scroll-target="#create-a-learner-object">Create a Learner object</a></li>
+  </ul></li>
+  <li><a href="#multi-class-mnist-classification" id="toc-multi-class-mnist-classification" class="nav-link" data-scroll-target="#multi-class-mnist-classification">Multi-class MNIST classification</a>
+  <ul class="collapse">
+  <li><a href="#imagedataloaders-easy-loading-of-data" id="toc-imagedataloaders-easy-loading-of-data" class="nav-link" data-scroll-target="#imagedataloaders-easy-loading-of-data">ImageDataLoaders: easy loading of data</a></li>
+  <li><a href="#custom-nn-model" id="toc-custom-nn-model" class="nav-link" data-scroll-target="#custom-nn-model">Custom NN Model</a></li>
+  <li><a href="#train-model-and-evaluate" id="toc-train-model-and-evaluate" class="nav-link" data-scroll-target="#train-model-and-evaluate">Train model and evaluate</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/lisamr/website/blob/main/posts/MNIST_classification.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>This post follows the content presented in <a href="https://colab.research.google.com/github/fastai/fastbook/blob/master/04_mnist_basics.ipynb">Chapter 4</a> of the fast.ai book, “Deep Learning for Coders with fastai &amp; PyTorch”. I’ve already written two related posts: <a href="../posts/ML_basics.html">ML Basics</a>, which introduces gradient descent and optimization, and <a href="../posts/ML_GP.html">Neural Networks from Scratch</a>, which covers foundational concepts behind deep learning models. While understanding the theory is essential, it’s far more efficient to use established libraries once the core ideas are clear.</p>
+<p>In this post, I’ll show how to use the <code>fastai</code> library—a high-level wrapper around <code>PyTorch</code>—to build a neural network that classifies handwritten digits, starting with a binary classification task (distinguishing between 3s and 7s), then expanding to all 10 digits (0–9).</p>
+</section>
+<section id="binary-mnist-classification" class="level1">
+<h1>Binary MNIST classification</h1>
+<p>We will be working with MNIST, Modified National Institute of Standards and Technology dataset, which is a commonly-used dataset of handwritten digits for training image classification models. The <code>fastai</code> package is already loaded with a sample of the data, containing images of 3’s and 7’s. Let’s download it.</p>
+<div id="cell-3" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> fastai.vision.<span class="bu">all</span> <span class="im">import</span> <span class="op">*</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> typing <span class="im">import</span> Literal</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:54}}" data-outputid="86192745-f95e-4b70-b00c-c2df41eec33a" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> untar_data(URLs.MNIST_SAMPLE)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The data got stored in a hidden folder somewhere in my home directory. I check out the contents within the directory below. The csv file contains a spreadsheet with 2 columns–file name and the label. We don’t use that. The folder for ‘train’ and ‘valid’ contain training and validation images, respectively, for the 3 and 7 digits.</p>
+<div id="cell-6" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="b6a34227-3da7-4d6a-b7dc-511272802573" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>[child.name <span class="cf">for</span> child <span class="kw">in</span> path.ls()]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="45">
+<pre><code>['train', 'labels.csv', 'valid']</code></pre>
+</div>
+</div>
+<p>As you can see, we have about equal training and validation data for 3 and 7 and there’s about 6x as much training data than validation data.</p>
+<div id="cell-8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="312f709b-ad49-4e75-8c9e-12029ef64f0a" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> dataset <span class="kw">in</span> [<span class="st">'train'</span>, <span class="st">'valid'</span>]:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> digit <span class="kw">in</span> [<span class="st">'3'</span>, <span class="st">'7'</span>]:</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Number of images in </span><span class="sc">{</span>dataset<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>digit<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span><span class="bu">len</span>((path<span class="op">/</span>dataset<span class="op">/</span>digit).ls())<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Number of images in train/3: 6131
+Number of images in train/7: 6265
+Number of images in valid/3: 1010
+Number of images in valid/7: 1028</code></pre>
+</div>
+</div>
+<p>Let’s see what one of those images look like. I’ll show the image using a <code>pandas</code> dataframe so that you can see the values of the pixels. The cells range between 0 and 255, with 255 being the maximum intensity value for a pixel in an 8-bit grayscale or color image. Also, all of these images are all 28x28 pixels, with a total of 784 cells.</p>
+<div id="cell-10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:537}}" data-outputid="befcc817-c478-4d25-fd91-b54ed372c5fc" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> (path<span class="op">/</span><span class="st">'train'</span><span class="op">/</span><span class="st">'7'</span>).ls()[<span class="dv">0</span>]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> Image.<span class="bu">open</span>(img)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Image dimension: </span><span class="sc">{</span>img<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(array(img)[<span class="dv">5</span>:<span class="dv">20</span>, <span class="dv">10</span>:<span class="dv">21</span>]).style.background_gradient(<span class="st">'Greys'</span>).set_properties(<span class="op">**</span>{<span class="st">'font-size'</span>: <span class="st">'6pt'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Image dimension: (28, 28)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="3">
+<style type="text/css">
+#T_10820_row0_col0, #T_10820_row0_col1, #T_10820_row0_col2, #T_10820_row0_col3, #T_10820_row0_col4, #T_10820_row0_col5, #T_10820_row0_col6, #T_10820_row0_col7, #T_10820_row0_col8, #T_10820_row0_col9, #T_10820_row0_col10, #T_10820_row1_col0, #T_10820_row1_col1, #T_10820_row1_col2, #T_10820_row1_col3, #T_10820_row1_col4, #T_10820_row1_col5, #T_10820_row1_col6, #T_10820_row1_col7, #T_10820_row1_col8, #T_10820_row1_col9, #T_10820_row1_col10, #T_10820_row6_col0, #T_10820_row6_col1, #T_10820_row6_col2, #T_10820_row6_col3, #T_10820_row6_col4, #T_10820_row7_col0, #T_10820_row7_col1, #T_10820_row7_col2, #T_10820_row7_col3, #T_10820_row7_col4, #T_10820_row7_col10, #T_10820_row8_col0, #T_10820_row8_col1, #T_10820_row8_col2, #T_10820_row8_col3, #T_10820_row8_col4, #T_10820_row8_col10, #T_10820_row9_col0, #T_10820_row9_col1, #T_10820_row9_col2, #T_10820_row9_col3, #T_10820_row9_col4, #T_10820_row9_col9, #T_10820_row9_col10, #T_10820_row10_col0, #T_10820_row10_col1, #T_10820_row10_col2, #T_10820_row10_col9, #T_10820_row10_col10, #T_10820_row11_col0, #T_10820_row11_col1, #T_10820_row11_col2, #T_10820_row11_col9, #T_10820_row11_col10, #T_10820_row12_col0, #T_10820_row12_col1, #T_10820_row12_col2, #T_10820_row12_col9, #T_10820_row12_col10, #T_10820_row13_col0, #T_10820_row13_col1, #T_10820_row13_col2, #T_10820_row13_col8, #T_10820_row13_col9, #T_10820_row13_col10, #T_10820_row14_col0, #T_10820_row14_col1, #T_10820_row14_col2, #T_10820_row14_col8, #T_10820_row14_col9, #T_10820_row14_col10 {
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row2_col0, #T_10820_row2_col1, #T_10820_row2_col2, #T_10820_row2_col3, #T_10820_row2_col4, #T_10820_row2_col5, #T_10820_row2_col6, #T_10820_row2_col7, #T_10820_row2_col8, #T_10820_row2_col9, #T_10820_row2_col10, #T_10820_row6_col7, #T_10820_row6_col8, #T_10820_row10_col5, #T_10820_row10_col6, #T_10820_row10_col7, #T_10820_row14_col4, #T_10820_row14_col5, #T_10820_row14_col6 {
+  background-color: #000000;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row3_col0, #T_10820_row3_col1, #T_10820_row3_col2, #T_10820_row3_col3, #T_10820_row3_col4, #T_10820_row3_col5, #T_10820_row3_col6, #T_10820_row3_col7, #T_10820_row3_col8, #T_10820_row3_col10, #T_10820_row4_col0, #T_10820_row4_col1, #T_10820_row4_col2, #T_10820_row4_col3, #T_10820_row4_col4, #T_10820_row4_col5, #T_10820_row4_col6, #T_10820_row4_col7, #T_10820_row4_col8, #T_10820_row5_col8, #T_10820_row7_col6, #T_10820_row7_col7, #T_10820_row7_col8, #T_10820_row8_col6, #T_10820_row8_col7, #T_10820_row8_col8, #T_10820_row9_col5, #T_10820_row9_col6, #T_10820_row9_col7, #T_10820_row9_col8, #T_10820_row11_col4, #T_10820_row11_col5, #T_10820_row11_col6, #T_10820_row11_col7, #T_10820_row12_col4, #T_10820_row12_col5, #T_10820_row12_col6, #T_10820_row13_col4, #T_10820_row13_col5, #T_10820_row13_col6 {
+  background-color: #020202;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row3_col9, #T_10820_row4_col9, #T_10820_row5_col9 {
+  background-color: #030303;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row4_col10 {
+  background-color: #515151;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row5_col0, #T_10820_row5_col1, #T_10820_row5_col2, #T_10820_row5_col3, #T_10820_row5_col4, #T_10820_row5_col5, #T_10820_row5_col6, #T_10820_row10_col8, #T_10820_row11_col8 {
+  background-color: #e4e4e4;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row5_col7 {
+  background-color: #666666;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row5_col10 {
+  background-color: #7c7c7c;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row6_col5 {
+  background-color: #fafafa;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row6_col6 {
+  background-color: #8f8f8f;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row6_col9 {
+  background-color: #0d0d0d;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row6_col10 {
+  background-color: #9d9d9d;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row7_col5 {
+  background-color: #e2e2e2;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row7_col9 {
+  background-color: #434343;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row8_col5 {
+  background-color: #656565;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row8_col9 {
+  background-color: #cbcbcb;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row10_col3 {
+  background-color: #f0f0f0;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row10_col4 {
+  background-color: #2f2f2f;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row11_col3, #T_10820_row12_col3, #T_10820_row13_col3 {
+  background-color: #7a7a7a;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row12_col7 {
+  background-color: #717171;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+#T_10820_row12_col8 {
+  background-color: #f6f6f6;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row13_col7, #T_10820_row14_col7 {
+  background-color: #b6b6b6;
+  color: #000000;
+  font-size: 6pt;
+}
+#T_10820_row14_col3 {
+  background-color: #797979;
+  color: #f1f1f1;
+  font-size: 6pt;
+}
+</style>
+
+<table id="T_10820" class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th class="blank level0" data-quarto-table-cell-role="th">&nbsp;</th>
+<th id="T_10820_level0_col0" class="col_heading level0 col0" data-quarto-table-cell-role="th">0</th>
+<th id="T_10820_level0_col1" class="col_heading level0 col1" data-quarto-table-cell-role="th">1</th>
+<th id="T_10820_level0_col2" class="col_heading level0 col2" data-quarto-table-cell-role="th">2</th>
+<th id="T_10820_level0_col3" class="col_heading level0 col3" data-quarto-table-cell-role="th">3</th>
+<th id="T_10820_level0_col4" class="col_heading level0 col4" data-quarto-table-cell-role="th">4</th>
+<th id="T_10820_level0_col5" class="col_heading level0 col5" data-quarto-table-cell-role="th">5</th>
+<th id="T_10820_level0_col6" class="col_heading level0 col6" data-quarto-table-cell-role="th">6</th>
+<th id="T_10820_level0_col7" class="col_heading level0 col7" data-quarto-table-cell-role="th">7</th>
+<th id="T_10820_level0_col8" class="col_heading level0 col8" data-quarto-table-cell-role="th">8</th>
+<th id="T_10820_level0_col9" class="col_heading level0 col9" data-quarto-table-cell-role="th">9</th>
+<th id="T_10820_level0_col10" class="col_heading level0 col10" data-quarto-table-cell-role="th">10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td id="T_10820_level0_row0" class="row_heading level0 row0" data-quarto-table-cell-role="th">0</td>
+<td id="T_10820_row0_col0" class="data row0 col0">0</td>
+<td id="T_10820_row0_col1" class="data row0 col1">0</td>
+<td id="T_10820_row0_col2" class="data row0 col2">0</td>
+<td id="T_10820_row0_col3" class="data row0 col3">0</td>
+<td id="T_10820_row0_col4" class="data row0 col4">0</td>
+<td id="T_10820_row0_col5" class="data row0 col5">0</td>
+<td id="T_10820_row0_col6" class="data row0 col6">0</td>
+<td id="T_10820_row0_col7" class="data row0 col7">0</td>
+<td id="T_10820_row0_col8" class="data row0 col8">0</td>
+<td id="T_10820_row0_col9" class="data row0 col9">0</td>
+<td id="T_10820_row0_col10" class="data row0 col10">0</td>
+</tr>
+<tr class="even">
+<td id="T_10820_level0_row1" class="row_heading level0 row1" data-quarto-table-cell-role="th">1</td>
+<td id="T_10820_row1_col0" class="data row1 col0">0</td>
+<td id="T_10820_row1_col1" class="data row1 col1">0</td>
+<td id="T_10820_row1_col2" class="data row1 col2">0</td>
+<td id="T_10820_row1_col3" class="data row1 col3">0</td>
+<td id="T_10820_row1_col4" class="data row1 col4">0</td>
+<td id="T_10820_row1_col5" class="data row1 col5">0</td>
+<td id="T_10820_row1_col6" class="data row1 col6">0</td>
+<td id="T_10820_row1_col7" class="data row1 col7">0</td>
+<td id="T_10820_row1_col8" class="data row1 col8">0</td>
+<td id="T_10820_row1_col9" class="data row1 col9">0</td>
+<td id="T_10820_row1_col10" class="data row1 col10">0</td>
+</tr>
+<tr class="odd">
+<td id="T_10820_level0_row2" class="row_heading level0 row2" data-quarto-table-cell-role="th">2</td>
+<td id="T_10820_row2_col0" class="data row2 col0">252</td>
+<td id="T_10820_row2_col1" class="data row2 col1">254</td>
+<td id="T_10820_row2_col2" class="data row2 col2">252</td>
+<td id="T_10820_row2_col3" class="data row2 col3">252</td>
+<td id="T_10820_row2_col4" class="data row2 col4">252</td>
+<td id="T_10820_row2_col5" class="data row2 col5">254</td>
+<td id="T_10820_row2_col6" class="data row2 col6">252</td>
+<td id="T_10820_row2_col7" class="data row2 col7">252</td>
+<td id="T_10820_row2_col8" class="data row2 col8">252</td>
+<td id="T_10820_row2_col9" class="data row2 col9">255</td>
+<td id="T_10820_row2_col10" class="data row2 col10">252</td>
+</tr>
+<tr class="even">
+<td id="T_10820_level0_row3" class="row_heading level0 row3" data-quarto-table-cell-role="th">3</td>
+<td id="T_10820_row3_col0" class="data row3 col0">250</td>
+<td id="T_10820_row3_col1" class="data row3 col1">252</td>
+<td id="T_10820_row3_col2" class="data row3 col2">250</td>
+<td id="T_10820_row3_col3" class="data row3 col3">250</td>
+<td id="T_10820_row3_col4" class="data row3 col4">250</td>
+<td id="T_10820_row3_col5" class="data row3 col5">252</td>
+<td id="T_10820_row3_col6" class="data row3 col6">250</td>
+<td id="T_10820_row3_col7" class="data row3 col7">250</td>
+<td id="T_10820_row3_col8" class="data row3 col8">250</td>
+<td id="T_10820_row3_col9" class="data row3 col9">252</td>
+<td id="T_10820_row3_col10" class="data row3 col10">250</td>
+</tr>
+<tr class="odd">
+<td id="T_10820_level0_row4" class="row_heading level0 row4" data-quarto-table-cell-role="th">4</td>
+<td id="T_10820_row4_col0" class="data row4 col0">250</td>
+<td id="T_10820_row4_col1" class="data row4 col1">252</td>
+<td id="T_10820_row4_col2" class="data row4 col2">250</td>
+<td id="T_10820_row4_col3" class="data row4 col3">250</td>
+<td id="T_10820_row4_col4" class="data row4 col4">250</td>
+<td id="T_10820_row4_col5" class="data row4 col5">252</td>
+<td id="T_10820_row4_col6" class="data row4 col6">250</td>
+<td id="T_10820_row4_col7" class="data row4 col7">250</td>
+<td id="T_10820_row4_col8" class="data row4 col8">250</td>
+<td id="T_10820_row4_col9" class="data row4 col9">252</td>
+<td id="T_10820_row4_col10" class="data row4 col10">189</td>
+</tr>
+<tr class="even">
+<td id="T_10820_level0_row5" class="row_heading level0 row5" data-quarto-table-cell-role="th">5</td>
+<td id="T_10820_row5_col0" class="data row5 col0">49</td>
+<td id="T_10820_row5_col1" class="data row5 col1">49</td>
+<td id="T_10820_row5_col2" class="data row5 col2">49</td>
+<td id="T_10820_row5_col3" class="data row5 col3">49</td>
+<td id="T_10820_row5_col4" class="data row5 col4">49</td>
+<td id="T_10820_row5_col5" class="data row5 col5">49</td>
+<td id="T_10820_row5_col6" class="data row5 col6">49</td>
+<td id="T_10820_row5_col7" class="data row5 col7">170</td>
+<td id="T_10820_row5_col8" class="data row5 col8">250</td>
+<td id="T_10820_row5_col9" class="data row5 col9">252</td>
+<td id="T_10820_row5_col10" class="data row5 col10">149</td>
+</tr>
+<tr class="odd">
+<td id="T_10820_level0_row6" class="row_heading level0 row6" data-quarto-table-cell-role="th">6</td>
+<td id="T_10820_row6_col0" class="data row6 col0">0</td>
+<td id="T_10820_row6_col1" class="data row6 col1">0</td>
+<td id="T_10820_row6_col2" class="data row6 col2">0</td>
+<td id="T_10820_row6_col3" class="data row6 col3">0</td>
+<td id="T_10820_row6_col4" class="data row6 col4">0</td>
+<td id="T_10820_row6_col5" class="data row6 col5">11</td>
+<td id="T_10820_row6_col6" class="data row6 col6">132</td>
+<td id="T_10820_row6_col7" class="data row6 col7">252</td>
+<td id="T_10820_row6_col8" class="data row6 col8">252</td>
+<td id="T_10820_row6_col9" class="data row6 col9">244</td>
+<td id="T_10820_row6_col10" class="data row6 col10">121</td>
+</tr>
+<tr class="even">
+<td id="T_10820_level0_row7" class="row_heading level0 row7" data-quarto-table-cell-role="th">7</td>
+<td id="T_10820_row7_col0" class="data row7 col0">0</td>
+<td id="T_10820_row7_col1" class="data row7 col1">0</td>
+<td id="T_10820_row7_col2" class="data row7 col2">0</td>
+<td id="T_10820_row7_col3" class="data row7 col3">0</td>
+<td id="T_10820_row7_col4" class="data row7 col4">0</td>
+<td id="T_10820_row7_col5" class="data row7 col5">51</td>
+<td id="T_10820_row7_col6" class="data row7 col6">250</td>
+<td id="T_10820_row7_col7" class="data row7 col7">250</td>
+<td id="T_10820_row7_col8" class="data row7 col8">250</td>
+<td id="T_10820_row7_col9" class="data row7 col9">202</td>
+<td id="T_10820_row7_col10" class="data row7 col10">0</td>
+</tr>
+<tr class="odd">
+<td id="T_10820_level0_row8" class="row_heading level0 row8" data-quarto-table-cell-role="th">8</td>
+<td id="T_10820_row8_col0" class="data row8 col0">0</td>
+<td id="T_10820_row8_col1" class="data row8 col1">0</td>
+<td id="T_10820_row8_col2" class="data row8 col2">0</td>
+<td id="T_10820_row8_col3" class="data row8 col3">0</td>
+<td id="T_10820_row8_col4" class="data row8 col4">0</td>
+<td id="T_10820_row8_col5" class="data row8 col5">172</td>
+<td id="T_10820_row8_col6" class="data row8 col6">250</td>
+<td id="T_10820_row8_col7" class="data row8 col7">250</td>
+<td id="T_10820_row8_col8" class="data row8 col8">250</td>
+<td id="T_10820_row8_col9" class="data row8 col9">80</td>
+<td id="T_10820_row8_col10" class="data row8 col10">0</td>
+</tr>
+<tr class="even">
+<td id="T_10820_level0_row9" class="row_heading level0 row9" data-quarto-table-cell-role="th">9</td>
+<td id="T_10820_row9_col0" class="data row9 col0">0</td>
+<td id="T_10820_row9_col1" class="data row9 col1">0</td>
+<td id="T_10820_row9_col2" class="data row9 col2">0</td>
+<td id="T_10820_row9_col3" class="data row9 col3">0</td>
+<td id="T_10820_row9_col4" class="data row9 col4">0</td>
+<td id="T_10820_row9_col5" class="data row9 col5">252</td>
+<td id="T_10820_row9_col6" class="data row9 col6">250</td>
+<td id="T_10820_row9_col7" class="data row9 col7">250</td>
+<td id="T_10820_row9_col8" class="data row9 col8">250</td>
+<td id="T_10820_row9_col9" class="data row9 col9">0</td>
+<td id="T_10820_row9_col10" class="data row9 col10">0</td>
+</tr>
+<tr class="odd">
+<td id="T_10820_level0_row10" class="row_heading level0 row10" data-quarto-table-cell-role="th">10</td>
+<td id="T_10820_row10_col0" class="data row10 col0">0</td>
+<td id="T_10820_row10_col1" class="data row10 col1">0</td>
+<td id="T_10820_row10_col2" class="data row10 col2">0</td>
+<td id="T_10820_row10_col3" class="data row10 col3">31</td>
+<td id="T_10820_row10_col4" class="data row10 col4">213</td>
+<td id="T_10820_row10_col5" class="data row10 col5">254</td>
+<td id="T_10820_row10_col6" class="data row10 col6">252</td>
+<td id="T_10820_row10_col7" class="data row10 col7">252</td>
+<td id="T_10820_row10_col8" class="data row10 col8">49</td>
+<td id="T_10820_row10_col9" class="data row10 col9">0</td>
+<td id="T_10820_row10_col10" class="data row10 col10">0</td>
+</tr>
+<tr class="even">
+<td id="T_10820_level0_row11" class="row_heading level0 row11" data-quarto-table-cell-role="th">11</td>
+<td id="T_10820_row11_col0" class="data row11 col0">0</td>
+<td id="T_10820_row11_col1" class="data row11 col1">0</td>
+<td id="T_10820_row11_col2" class="data row11 col2">0</td>
+<td id="T_10820_row11_col3" class="data row11 col3">151</td>
+<td id="T_10820_row11_col4" class="data row11 col4">250</td>
+<td id="T_10820_row11_col5" class="data row11 col5">252</td>
+<td id="T_10820_row11_col6" class="data row11 col6">250</td>
+<td id="T_10820_row11_col7" class="data row11 col7">250</td>
+<td id="T_10820_row11_col8" class="data row11 col8">49</td>
+<td id="T_10820_row11_col9" class="data row11 col9">0</td>
+<td id="T_10820_row11_col10" class="data row11 col10">0</td>
+</tr>
+<tr class="odd">
+<td id="T_10820_level0_row12" class="row_heading level0 row12" data-quarto-table-cell-role="th">12</td>
+<td id="T_10820_row12_col0" class="data row12 col0">0</td>
+<td id="T_10820_row12_col1" class="data row12 col1">0</td>
+<td id="T_10820_row12_col2" class="data row12 col2">0</td>
+<td id="T_10820_row12_col3" class="data row12 col3">151</td>
+<td id="T_10820_row12_col4" class="data row12 col4">250</td>
+<td id="T_10820_row12_col5" class="data row12 col5">252</td>
+<td id="T_10820_row12_col6" class="data row12 col6">250</td>
+<td id="T_10820_row12_col7" class="data row12 col7">159</td>
+<td id="T_10820_row12_col8" class="data row12 col8">20</td>
+<td id="T_10820_row12_col9" class="data row12 col9">0</td>
+<td id="T_10820_row12_col10" class="data row12 col10">0</td>
+</tr>
+<tr class="even">
+<td id="T_10820_level0_row13" class="row_heading level0 row13" data-quarto-table-cell-role="th">13</td>
+<td id="T_10820_row13_col0" class="data row13 col0">0</td>
+<td id="T_10820_row13_col1" class="data row13 col1">0</td>
+<td id="T_10820_row13_col2" class="data row13 col2">0</td>
+<td id="T_10820_row13_col3" class="data row13 col3">151</td>
+<td id="T_10820_row13_col4" class="data row13 col4">250</td>
+<td id="T_10820_row13_col5" class="data row13 col5">252</td>
+<td id="T_10820_row13_col6" class="data row13 col6">250</td>
+<td id="T_10820_row13_col7" class="data row13 col7">100</td>
+<td id="T_10820_row13_col8" class="data row13 col8">0</td>
+<td id="T_10820_row13_col9" class="data row13 col9">0</td>
+<td id="T_10820_row13_col10" class="data row13 col10">0</td>
+</tr>
+<tr class="odd">
+<td id="T_10820_level0_row14" class="row_heading level0 row14" data-quarto-table-cell-role="th">14</td>
+<td id="T_10820_row14_col0" class="data row14 col0">0</td>
+<td id="T_10820_row14_col1" class="data row14 col1">0</td>
+<td id="T_10820_row14_col2" class="data row14 col2">0</td>
+<td id="T_10820_row14_col3" class="data row14 col3">152</td>
+<td id="T_10820_row14_col4" class="data row14 col4">252</td>
+<td id="T_10820_row14_col5" class="data row14 col5">254</td>
+<td id="T_10820_row14_col6" class="data row14 col6">252</td>
+<td id="T_10820_row14_col7" class="data row14 col7">100</td>
+<td id="T_10820_row14_col8" class="data row14 col8">0</td>
+<td id="T_10820_row14_col9" class="data row14 col9">0</td>
+<td id="T_10820_row14_col10" class="data row14 col10">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="load-up-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-up-the-data">Load up the data</h2>
+<p>We want to load every image in the dataset while maintaining the split between training and validation, as well as the identity of the digits. There is a faster way to do this with an <code>ImageDataLoaders</code> class and I will show you that in the next section. For now, let’s break down the steps more manually. I wrote a function below that loads the images, converts them into tensors, then stacks them, and normalizes the values to be between 0 and 1.</p>
+<div id="cell-12" class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_stack_imgs(number, dataset: Literal[<span class="st">'train'</span>, <span class="st">'valid'</span>]):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># load the numbers as images</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    imgs <span class="op">=</span> [tensor(Image.<span class="bu">open</span>(img)) <span class="cf">for</span> img <span class="kw">in</span> (path<span class="op">/</span>dataset<span class="op">/</span><span class="bu">str</span>(number)).ls()]</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># stack them, normalizing the values to be between 0-1</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> torch.stack(imgs).<span class="bu">float</span>()<span class="op">/</span><span class="dv">255</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-13" class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load the numbers--training and validation</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>train_threes <span class="op">=</span> load_stack_imgs(<span class="dv">3</span>, <span class="st">'train'</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>train_sevens <span class="op">=</span> load_stack_imgs(<span class="dv">7</span>, <span class="st">'train'</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>valid_threes <span class="op">=</span> load_stack_imgs(<span class="dv">3</span>, <span class="st">'valid'</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>valid_sevens <span class="op">=</span> load_stack_imgs(<span class="dv">7</span>, <span class="st">'valid'</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co"># number of pixels</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>npixels <span class="op">=</span> <span class="dv">28</span><span class="op">*</span><span class="dv">28</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, we’ll create a <code>DataLoader</code> object, which will join the data (<code>x</code>, i.e.&nbsp;the images) and the labels (<code>y</code>, i.e.&nbsp;binary 0/1 codes for 3 vs.&nbsp;7). <code>DataLoader</code> is native to <code>PyTorch</code> and is also used in <code>fastai</code> to form the basis of the <code>Learner</code> class (more on that in the next section). The data and labels will contain both 3’s and 7’s, but I still keep the training data separate from the validation data.</p>
+<p>I wrote a function below that creates 2-rank tensors for both <code>x</code> and <code>y</code>. <code>y</code> will have N rows, where N = total number of images, and 1 column, which will be either a 0 or 1. I arbitrarily chose 0 to represent a 3 and 1 to be a 7. They are dummy variables. Likewise, <code>x</code> will also have N rows, but it will have 784 columns, which refers to all the pixels contained in each image. <code>x</code> starts as a 3-rank tensor, with dimension N, Width, Height. In convolutional neural networks, we’d want to retain this 3D structure so that the models can learn about the spatial arrangement of the images. But in simple neural nets, we’re going to ignore that and collapse each row’s data into a vector. That’s what <code>x.view(x.size(0), -1)</code> does.</p>
+<div id="cell-15" class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> create_dl_binary(data_list, batch_size <span class="op">=</span> <span class="dv">256</span>):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">'''Creates a DataLoader object, which combines the x and y values of a dataset.</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">    assumes data is binary--only 2 types of images and y can only be 0 or 1.</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">    '''</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create tensors that combine all the training data--x and y</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> torch.cat(data_list)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> tensor(<span class="bu">len</span>(data_list[<span class="dv">0</span>])<span class="op">*</span>[<span class="dv">0</span>] <span class="op">+</span> <span class="bu">len</span>(data_list[<span class="dv">1</span>])<span class="op">*</span>[<span class="dv">1</span>]).<span class="bu">float</span>()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># make the predictors and response both 2-rank tensors</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> x.view(x.size(<span class="dv">0</span>), <span class="op">-</span><span class="dv">1</span>) <span class="co"># turns list of matrices into single matrix by flattening each matrix into vector</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> y.unsqueeze(<span class="dv">1</span>) <span class="co"># turns vector into matrix</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># combine into a list of tuples for pytorch</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>    dset <span class="op">=</span> <span class="bu">list</span>(<span class="bu">zip</span>(x, y))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># create a DataLoader object</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> DataLoader(dset, batch_size<span class="op">=</span>batch_size)</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div id="cell-16" class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>train_dl <span class="op">=</span> create_dl_binary([train_threes, train_sevens])</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>valid_dl <span class="op">=</span> create_dl_binary([valid_threes, valid_sevens])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The resulting dataloader objects are split into batches, each with 256 rows of data (except for the last batch, which might have less). Below, I verify that <code>x</code> and <code>y</code> have the same number of samples and <code>x</code> has 784 coefficients–one for each pixel, and <code>y</code> has 1 label for each image.</p>
+<div id="cell-18" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="059f063d-e0cf-4d96-e930-9c3bcf44b5ef" data-execution_count="76">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>xb, yb <span class="op">=</span> first(train_dl)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>xb.shape, yb.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="76">
+<pre><code>(torch.Size([256, 784]), torch.Size([256, 1]))</code></pre>
+</div>
+</div>
+</section>
+<section id="create-a-learner-object" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-learner-object">Create a Learner object</h2>
+<p>The <code>Learner</code> class is specific to <code>fastai</code> and is a way to simplify the training of a neural network. Similar to the optimization class that I wrote in my <a href="../posts/ML_GP.html">last blog post</a>, the <code>Learner</code> class contains the following:</p>
+<ul>
+<li>The data as <code>DataLoaders</code> objects</li>
+<li>Model that makes predictions</li>
+<li>Loss function</li>
+<li>Optimizer</li>
+<li>A function that calculates the overall accuracy</li>
+</ul>
+<p><em>DataLoaders objects</em></p>
+<p>To assemble the <code>DataLoaders</code>, I simply combine the training and validation <code>DataLoader</code> objects that I made above.</p>
+<div id="cell-20" class="cell" data-execution_count="77">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data loaders</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>dls <span class="op">=</span> DataLoaders(train_dl, valid_dl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>Model function</em></p>
+<p>To create a neural network, I can use the <code>nn.Module</code> from <code>PyTorch</code>.</p>
+<div id="cell-22" class="cell" data-execution_count="78">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prediction function</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nn_1hidden(nodes, coefs <span class="op">=</span> npixels):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nn.Sequential(</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        nn.Linear(coefs, nodes),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>        nn.ReLU(),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>        nn.Linear(nodes, <span class="dv">1</span>),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        nn.Sigmoid()</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code cell above is equivalent to this: <span class="math display">\[
+\begin{aligned}
+\text{layer}_1 &amp;= ReLU(XW_1 + b_1) \\
+\hat{y} &amp;= \text{inv-logit}(\text{layer}_1W_2 + b_2) \\
+\end{aligned}
+\]</span></p>
+<p>This model is very similar to the one I used to fit the GP model in my previous blog post, except here, <code>X</code> has multiple coefficients—one for each of the 784 pixel values in the images. The weight matrix <span class="math inline">\(W_1\)</span>​ has one row for each of these 784 input features and a number of columns corresponding to the hidden nodes.</p>
+<p>One key difference is that the output layer is transformed using a <code>sigmoid</code> function, which is equivalent to the inverse-logit. While “sigmoid” is the preferred term in the deep learning world, I’m stubborn and calling it “inv-logit” because that’s exactly what it is. The sigmoid function converts log-odds—typically ranging from about -3 to 3—into probabilities between 0 and 1.</p>
+<p><em>Loss function</em></p>
+<p>In the past, I calculated RMSE to calculate the loss for real/continuous, unconstrained data. The response variables here are 0 or 1, meaning that the data are constrained to be binary. I use <code>nn.BCELoss</code> (Binary Cross Entropy Loss) to calculate the loss, which compares the predicted probability with the data’s label (0 or 1) and penalizes the difference.</p>
+<p><em>Optimizer</em></p>
+<p>I use <code>SGD</code> (stochastic gradient descent), the same optimization algorithm I previously implemented from scratch. In <code>PyTorch</code>, <code>SGD</code> is an optimizer that updates model parameters using gradients descent. While it doesn’t initiate parameters itself (that’s handled by the model), it keeps track of them and adjusts their values based on the calculated gradients during training.</p>
+<p><em>Accuracy metric</em></p>
+<p>Lastly, I wrote a function that calculates the proportion of correct predictions of the <em>validation</em> dataset. We don’t care about how the model performs on the training data; we care about how well the model can predict data that it hasn’t seen yet, which is the validation data.</p>
+<div id="cell-25" class="cell" data-execution_count="79">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># metrics--calculated on validation dataset</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mean_accuracy(pred, obs):</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    correct <span class="op">=</span> (pred <span class="op">&gt;</span> <span class="fl">.5</span>) <span class="op">==</span> obs</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> correct.<span class="bu">float</span>().mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>Learner object</em></p>
+<p>The Learner class ties everything together—data, model, loss, optimizer, and accuracy metric. I’m training a neural network with 30 nodes, using batches of 256 images (as defined by the DataLoader). For each epoch, the model trains on each batch sequentially, then evaluates the validation set by calculating the loss and overall accuracy. This sequential batch processing happens when I run the model locally on my laptop using only a CPU, or if I run it in the cloud using a GPU (e.g.&nbsp;in Google Colab). Although the batches are processed one at a time, GPUs can significantly accelerate training by parallelizing computations <em>within</em> each batch—processing all 256 images in a batch simultaneously. Processing time for this simple model is fast on a CPU or GPU.</p>
+<div id="cell-27" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:676}}" data-outputid="ccfb0577-def1-42c0-bf0c-364afd728d7c" data-execution_count="80">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>learner <span class="op">=</span> Learner(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    dls <span class="op">=</span> dls,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span> nn_1hidden(nodes<span class="op">=</span><span class="dv">30</span>),</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    loss_func<span class="op">=</span> nn.BCELoss(),</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    opt_func<span class="op">=</span>SGD,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    metrics<span class="op">=</span>mean_accuracy</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> <span class="fl">.1</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>learner.fit(<span class="dv">20</span>, lr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">mean_accuracy</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.197608</td>
+<td>1.371563</td>
+<td>0.504416</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.124318</td>
+<td>0.465672</td>
+<td>0.786065</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.078641</td>
+<td>0.255310</td>
+<td>0.902355</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.058105</td>
+<td>0.194702</td>
+<td>0.927870</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.048356</td>
+<td>0.164348</td>
+<td>0.942100</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>0.043171</td>
+<td>0.145525</td>
+<td>0.953876</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>0.040016</td>
+<td>0.132457</td>
+<td>0.956820</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>0.037830</td>
+<td>0.122838</td>
+<td>0.959274</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>0.036125</td>
+<td>0.115486</td>
+<td>0.962709</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>0.034743</td>
+<td>0.109557</td>
+<td>0.964671</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>0.033574</td>
+<td>0.104708</td>
+<td>0.965653</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>0.032544</td>
+<td>0.100726</td>
+<td>0.966143</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>0.031635</td>
+<td>0.097362</td>
+<td>0.966143</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td>0.030824</td>
+<td>0.094433</td>
+<td>0.965653</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>0.030090</td>
+<td>0.091868</td>
+<td>0.968106</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>15</td>
+<td>0.029425</td>
+<td>0.089576</td>
+<td>0.970069</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>16</td>
+<td>0.028808</td>
+<td>0.087605</td>
+<td>0.970559</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>17</td>
+<td>0.028242</td>
+<td>0.085826</td>
+<td>0.971050</td>
+<td>00:00</td>
+</tr>
+<tr class="odd">
+<td>18</td>
+<td>0.027722</td>
+<td>0.084199</td>
+<td>0.972522</td>
+<td>00:00</td>
+</tr>
+<tr class="even">
+<td>19</td>
+<td>0.027241</td>
+<td>0.082701</td>
+<td>0.972522</td>
+<td>00:00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>As you can see, we achieve &gt;97% accuracy within a handful of epochs.</p>
+<div id="cell-29" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:449}}" data-outputid="b16cc52e-542b-41b0-aaeb-772dc3823ede" data-execution_count="81">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>vals <span class="op">=</span> learner.recorder.values</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> [v[<span class="dv">2</span>] <span class="cf">for</span> v <span class="kw">in</span> vals]</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>plt.plot(acc)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Epochs'</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"Overall accuracy"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MNIST_classification_files/figure-html/cell-16-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="multi-class-mnist-classification" class="level1">
+<h1>Multi-class MNIST classification</h1>
+<p>The MNIST dataset contains all 10 digits from 0 to 9. To train a classifier that can recognize multiple digits, a few modifications to the model described above are necessary. First, the output layer of the neural network should have 10 output neurons, meaning it will predict 10 values instead of just one. Each output will represent the log-odds for a specific digit. Second, I will use the loss function <code>nn.CrossEntropyLoss()</code>, which expects raw log-odds as input and integer class labels as targets. This loss function is commonly used for multi-class classification. Internally, it applies <code>log(softmax(output))</code>, selects the value corresponding to the correct class, and computes the negative log-likelihood. The softmax function, used in both machine learning and statistics, converts raw log-odds into probabilities such that all values sum to 1.</p>
+<p>Let’s download the data and check out its structure.</p>
+<div id="cell-31" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="8b84eb0f-e9a1-459f-b088-a1d7a473c447" data-execution_count="82">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> untar_data(URLs.MNIST)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>path</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="82">
+<pre><code>Path('/root/.fastai/data/mnist_png')</code></pre>
+</div>
+</div>
+<div id="cell-32" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="9abe5c04-6416-4b88-cbd6-64b311dc9353" data-execution_count="86">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>paths <span class="op">=</span> (path<span class="op">/</span><span class="st">'training'</span>).ls() <span class="op">+</span> (path<span class="op">/</span><span class="st">'testing'</span>).ls()</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>short_paths <span class="op">=</span> [Path(<span class="op">*</span>path.parts[<span class="op">-</span><span class="dv">2</span>:]) <span class="cf">for</span> path <span class="kw">in</span> paths]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>n_images <span class="op">=</span> [<span class="bu">len</span>(path.ls()) <span class="cf">for</span> path <span class="kw">in</span> paths]</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="bu">list</span>(<span class="bu">zip</span>(short_paths, n_images))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="86">
+<pre><code>[(Path('training/1'), 6742),
+ (Path('training/3'), 6131),
+ (Path('training/7'), 6265),
+ (Path('training/6'), 5918),
+ (Path('training/5'), 5421),
+ (Path('training/0'), 5923),
+ (Path('training/9'), 5949),
+ (Path('training/2'), 5958),
+ (Path('training/4'), 5842),
+ (Path('training/8'), 5851),
+ (Path('testing/1'), 1135),
+ (Path('testing/3'), 1010),
+ (Path('testing/7'), 1028),
+ (Path('testing/6'), 958),
+ (Path('testing/5'), 892),
+ (Path('testing/0'), 980),
+ (Path('testing/9'), 1009),
+ (Path('testing/2'), 1032),
+ (Path('testing/4'), 982),
+ (Path('testing/8'), 974)]</code></pre>
+</div>
+</div>
+<p>Check out one of the images. It looks like it’s in the same format as the sample dataset.</p>
+<div id="cell-34" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:149}}" data-outputid="17efc56c-e746-422b-e90a-9da4faed449d" data-execution_count="87">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>img_path <span class="op">=</span> (path<span class="op">/</span><span class="st">'training'</span><span class="op">/</span><span class="st">'5'</span>).ls()[<span class="dv">1000</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>img <span class="op">=</span> Image.<span class="bu">open</span>(img_path)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(img.shape)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>show_image(img)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(28, 28)</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="MNIST_classification_files/figure-html/cell-19-output-2.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="imagedataloaders-easy-loading-of-data" class="level2">
+<h2 class="anchored" data-anchor-id="imagedataloaders-easy-loading-of-data">ImageDataLoaders: easy loading of data</h2>
+<p>The dataset contains training and testing, but no folder reserved for validation. Technically, testing data is intended to be the never-before-seen dataset that the model should be evaluated on. For the sake of simplicity, I’m just going to treat the testing data as validation like I did in the previous example.</p>
+<p>Instead of creating a <code>DataLoaders</code> object from scratch, I’m using the <code>ImageDataLoaders</code> class, which simplifies much of the setup. I use the <code>from_folder()</code> method to load images from a directory, specify which folders correspond to training and validation data, and define the batch size. Since the images are organized in folders named after their labels, the method automatically assigns the target values (<code>y</code>).</p>
+<p>By default, <code>ImageDataLoaders</code> loads images as RGB, but the MNIST data is grayscale. To reflect that, I specify <code>PILImageBW</code>, which also ensures the pixel values are normalized between 0 and 1.</p>
+<p>There’s one caveat: I couldn’t directly flatten the image data (<code>x</code>) within the data loading process without also affecting the target labels (<code>y</code>). This isn’t typically an issue, as you usually want to preserve the 2D structure of images for convolutional neural networks. However, for a basic neural network like the one I’m building, the input needs to be flattened. Additionally, while the previous binary classification required target labels as a matrix, <code>nn.CrossEntropyLoss()</code> for multi-class classification expects <code>y</code> to be a vector. Since I couldn’t figure out how to apply separate transformations for <code>x</code> and <code>y</code> during data loading, my solution was to include <code>nn.Flatten()</code> at the start of my neural network model.</p>
+<div id="cell-36" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;}}" data-outputid="4a079cb8-d25f-480f-d0a2-d06b0768dbd7" data-execution_count="89">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>dls_multi <span class="op">=</span> ImageDataLoaders.from_folder(path, <span class="co"># parent path to images</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                                   train <span class="op">=</span> <span class="st">'training'</span>, <span class="co"># folder name for training</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                                   valid <span class="op">=</span> <span class="st">'testing'</span>, <span class="co"># folder name for validation</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                                   bs<span class="op">=</span><span class="dv">256</span>, <span class="co"># batch size</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                                   img_cls<span class="op">=</span>PILImageBW <span class="co"># load images as grayscale rather than default RGB</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                                   )</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>xb, yb <span class="op">=</span> dls_multi.one_batch()</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># x is not flat--its a stack of images with a greyscale band. Will flatten in the NN model.</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>xb.shape, yb.shape</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="89">
+<pre><code>(torch.Size([256, 1, 28, 28]), torch.Size([256]))</code></pre>
+</div>
+</div>
+</section>
+<section id="custom-nn-model" class="level2">
+<h2 class="anchored" data-anchor-id="custom-nn-model">Custom NN Model</h2>
+<p>Like I already stated, I’ll need to create a NN model that flattens the image. That’s what <code>nn.Flatten()</code> does. The rest of the model is very similar to the one I wrote in the binary classification. Differences are…</p>
+<ol type="1">
+<li>There are 10 output nodes in the output layer because we are predicting the log-odds of each of the 10 digit classes.</li>
+<li>I do not transform the output layer with a sigmoid function. This is because the loss function expects raw log-odds rather than probabilities.</li>
+</ol>
+<div id="cell-38" class="cell" data-execution_count="90">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nn_1hidden_multi(nodes, coefs <span class="op">=</span> <span class="dv">784</span>, outputs <span class="op">=</span> <span class="dv">10</span>):</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> nn.Sequential(</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>        nn.Flatten(),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>        nn.Linear(coefs, nodes),</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>        nn.ReLU(),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>        nn.Linear(nodes, outputs)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="train-model-and-evaluate" class="level2">
+<h2 class="anchored" data-anchor-id="train-model-and-evaluate">Train model and evaluate</h2>
+<p>I specify the same parameters in the Learner class as before. One thing that I have not addressed yet is the metrics function <code>accuracy</code>. This is a built in function that is set up to automatically interpret the model’s output.</p>
+<p>Running this takes a lot more compute power, so I ran this on Google Colab with GPU resources.</p>
+<div id="cell-40" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:206}}" data-outputid="2838c7d6-8b9d-4545-ad09-2fe71c825634" data-execution_count="91">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>learner_multi2 <span class="op">=</span> Learner(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>    dls <span class="op">=</span> dls_multi,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>    model<span class="op">=</span> nn_1hidden_multi(nodes<span class="op">=</span><span class="dv">30</span>),</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    loss_func<span class="op">=</span> nn.CrossEntropyLoss(),</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    opt_func<span class="op">=</span>SGD,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    metrics<span class="op">=</span>accuracy</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> <span class="fl">.5</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>learner_multi2.fit(<span class="dv">5</span>, lr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th">epoch</th>
+<th data-quarto-table-cell-role="th">train_loss</th>
+<th data-quarto-table-cell-role="th">valid_loss</th>
+<th data-quarto-table-cell-role="th">accuracy</th>
+<th data-quarto-table-cell-role="th">time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>0.302452</td>
+<td>0.246996</td>
+<td>0.928200</td>
+<td>00:52</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>0.203011</td>
+<td>0.188507</td>
+<td>0.943600</td>
+<td>00:54</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>0.170280</td>
+<td>0.160384</td>
+<td>0.951500</td>
+<td>00:54</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>0.151577</td>
+<td>0.141061</td>
+<td>0.957200</td>
+<td>00:50</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>0.132551</td>
+<td>0.123016</td>
+<td>0.962800</td>
+<td>00:47</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Lastly, let’s check out a confusion matrix. There are plenty more ways to evaluate how well the model performed, but this is a fast, easy way to see how well the model classified the 10 different digits.</p>
+<div id="cell-42" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;colab&quot;,&quot;value&quot;:{&quot;base_uri&quot;:&quot;https://localhost:8080/&quot;,&quot;height&quot;:363}}" data-outputid="e77421e1-b852-4c98-b8d4-90e28db13cb1" data-execution_count="92">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> confusion_matrix</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get predictions and true labels from the validation set</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>preds, targets <span class="op">=</span> learner_multi2.get_preds()</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the predicted class for each sample by choosing the one w/ highest log-odds</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>predicted_classes <span class="op">=</span> torch.argmax(preds, dim<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Compute the confusion matrix</span></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>cm <span class="op">=</span> confusion_matrix(targets, predicted_classes)</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the confusion matrix using pandas DataFrame for better readability</span></span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>display(pd.DataFrame(cm))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+
+<style>
+    /* Turns off some styling */
+    progress {
+        /* gets rid of default border in Firefox and Opera. */
+        border: none;
+        /* Needs to be in here for Safari polyfill so background images work as expected. */
+        background-size: auto;
+    }
+    progress:not([value]), progress:not([value])::-webkit-progress-bar {
+        background: repeating-linear-gradient(45deg, #7e7e7e, #7e7e7e 10px, #5c5c5c 10px, #5c5c5c 20px);
+    }
+    .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+        background: #F44336;
+    }
+</style>
+</div>
+<div class="cell-output cell-output-display">
+
+</div>
+<div class="cell-output cell-output-display">
+<div id="df-d94177ab-ada5-41dc-badf-8ffe8bae0af1" class="colab-df-container">
+    <div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+<th data-quarto-table-cell-role="th">2</th>
+<th data-quarto-table-cell-role="th">3</th>
+<th data-quarto-table-cell-role="th">4</th>
+<th data-quarto-table-cell-role="th">5</th>
+<th data-quarto-table-cell-role="th">6</th>
+<th data-quarto-table-cell-role="th">7</th>
+<th data-quarto-table-cell-role="th">8</th>
+<th data-quarto-table-cell-role="th">9</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>967</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>0</td>
+<td>1117</td>
+<td>4</td>
+<td>4</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>5</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>5</td>
+<td>2</td>
+<td>993</td>
+<td>6</td>
+<td>7</td>
+<td>0</td>
+<td>7</td>
+<td>8</td>
+<td>4</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>0</td>
+<td>0</td>
+<td>7</td>
+<td>977</td>
+<td>0</td>
+<td>10</td>
+<td>0</td>
+<td>7</td>
+<td>6</td>
+<td>3</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>1</td>
+<td>0</td>
+<td>5</td>
+<td>1</td>
+<td>945</td>
+<td>1</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>19</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>6</td>
+<td>1</td>
+<td>1</td>
+<td>8</td>
+<td>1</td>
+<td>853</td>
+<td>8</td>
+<td>1</td>
+<td>7</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>8</td>
+<td>3</td>
+<td>3</td>
+<td>0</td>
+<td>4</td>
+<td>7</td>
+<td>931</td>
+<td>0</td>
+<td>2</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>1</td>
+<td>6</td>
+<td>14</td>
+<td>8</td>
+<td>3</td>
+<td>0</td>
+<td>1</td>
+<td>979</td>
+<td>2</td>
+<td>14</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">8</td>
+<td>5</td>
+<td>3</td>
+<td>9</td>
+<td>10</td>
+<td>5</td>
+<td>8</td>
+<td>7</td>
+<td>7</td>
+<td>919</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">9</td>
+<td>5</td>
+<td>7</td>
+<td>1</td>
+<td>11</td>
+<td>16</td>
+<td>7</td>
+<td>1</td>
+<td>9</td>
+<td>5</td>
+<td>947</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-d94177ab-ada5-41dc-badf-8ffe8bae0af1')" title="Convert this dataframe to an interactive table." style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"></path>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-d94177ab-ada5-41dc-badf-8ffe8bae0af1 button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-d94177ab-ada5-41dc-badf-8ffe8bae0af1');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+    <div id="df-8dd17feb-f39a-4eb6-a307-0c15f7a2d003">
+      <button class="colab-df-quickchart" onclick="quickchart('df-8dd17feb-f39a-4eb6-a307-0c15f7a2d003')" title="Suggest charts" style="display:none;">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewbox="0 0 24 24" width="24px">
+    <g>
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"></path>
+    </g>
+</svg>
+      </button>
+
+<style>
+  .colab-df-quickchart {
+      --bg-color: #E8F0FE;
+      --fill-color: #1967D2;
+      --hover-bg-color: #E2EBFA;
+      --hover-fill-color: #174EA6;
+      --disabled-fill-color: #AAA;
+      --disabled-bg-color: #DDD;
+  }
+
+  [theme=dark] .colab-df-quickchart {
+      --bg-color: #3B4455;
+      --fill-color: #D2E3FC;
+      --hover-bg-color: #434B5C;
+      --hover-fill-color: #FFFFFF;
+      --disabled-bg-color: #3B4455;
+      --disabled-fill-color: #666;
+  }
+
+  .colab-df-quickchart {
+    background-color: var(--bg-color);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    fill: var(--fill-color);
+    height: 32px;
+    padding: 0;
+    width: 32px;
+  }
+
+  .colab-df-quickchart:hover {
+    background-color: var(--hover-bg-color);
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    fill: var(--button-hover-fill-color);
+  }
+
+  .colab-df-quickchart-complete:disabled,
+  .colab-df-quickchart-complete:disabled:hover {
+    background-color: var(--disabled-bg-color);
+    fill: var(--disabled-fill-color);
+    box-shadow: none;
+  }
+
+  .colab-df-spinner {
+    border: 2px solid var(--fill-color);
+    border-color: transparent;
+    border-bottom-color: var(--fill-color);
+    animation:
+      spin 1s steps(1) infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      border-color: transparent;
+      border-bottom-color: var(--fill-color);
+      border-left-color: var(--fill-color);
+    }
+    20% {
+      border-color: transparent;
+      border-left-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+    }
+    30% {
+      border-color: transparent;
+      border-left-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+      border-right-color: var(--fill-color);
+    }
+    40% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+    }
+    60% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+    }
+    80% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+      border-bottom-color: var(--fill-color);
+    }
+    90% {
+      border-color: transparent;
+      border-bottom-color: var(--fill-color);
+    }
+  }
+</style>
+
+      <script>
+        async function quickchart(key) {
+          const quickchartButtonEl =
+            document.querySelector('#' + key + ' button');
+          quickchartButtonEl.disabled = true;  // To prevent multiple clicks.
+          quickchartButtonEl.classList.add('colab-df-spinner');
+          try {
+            const charts = await google.colab.kernel.invokeFunction(
+                'suggestCharts', [key], {});
+          } catch (error) {
+            console.error('Error during call to suggestCharts:', error);
+          }
+          quickchartButtonEl.classList.remove('colab-df-spinner');
+          quickchartButtonEl.classList.add('colab-df-quickchart-complete');
+        }
+        (() => {
+          let quickchartButtonEl =
+            document.querySelector('#df-8dd17feb-f39a-4eb6-a307-0c15f7a2d003 button');
+          quickchartButtonEl.style.display =
+            google.colab.kernel.accessAllowed ? 'block' : 'none';
+        })();
+      </script>
+    </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/lisamr/website/blob/main/posts/MNIST_classification.ipynb" class="toc-action"><i class="bi bi-github"></i>View source</a></li></ul></div></div></div></footer></body></html>
